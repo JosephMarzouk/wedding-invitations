@@ -12,18 +12,6 @@ const LEAVES = [
 ];
 export const ROSE = "M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22";
 
-// Trailing stems with leaves and small roses, hung from the top corners of the sealed-card landing.
-const HANG =
-  "M30 0 C 40 60, 20 120, 40 180 S 70 280, 60 350 M90 0 C 80 50, 100 100, 90 150 S 110 240, 100 290 M150 0 C 140 40, 160 80, 150 120 S 165 190, 155 220 M40 180 C 60 170, 80 180, 95 200 M60 350 C 50 330, 30 320, 10 330 M90 150 C 110 140, 130 150, 140 170";
-const HANG_LEAVES = [
-  "M34 40 q-16 6 -18 -10 q16 -6 18 10z", "M30 90 q16 6 8 20 q-16 -6 -8 -20z", "M38 140 q-18 4 -16 -14 q18 -4 16 14z",
-  "M52 230 q16 6 8 20 q-16 -6 -8 -20z", "M60 290 q-18 4 -16 -14 q18 -4 16 14z", "M86 40 q16 6 8 20 q-16 -6 -8 -20z",
-  "M96 110 q-18 4 -16 -14 q18 -4 16 14z", "M98 200 q16 6 8 20 q-16 -6 -8 -20z", "M100 260 q-18 4 -16 -14 q18 -4 16 14z",
-  "M146 40 q-16 6 -18 -10 q16 -6 18 10z", "M156 90 q16 6 8 20 q-16 -6 -8 -20z", "M152 160 q-18 4 -16 -14 q18 -4 16 14z",
-  "M120 176 q14 -12 26 2 q-14 12 -26 -2z", "M78 190 q14 -12 26 2 q-14 12 -26 -2z",
-];
-const HANG_ROSES = ["translate(60 352)", "translate(100 292) scale(.8)", "translate(155 222) scale(.65)", "translate(40 182) scale(.55)"];
-
 export function Ornaments() {
   return (
     <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
@@ -38,13 +26,6 @@ export function Ornaments() {
               <path transform="translate(60 152) scale(.6)" d={ROSE} />
               <path transform="translate(260 118) scale(.55)" d={ROSE} />
             </g>
-          </g>
-        </symbol>
-        <symbol id="hang" viewBox="0 0 220 360">
-          <g fill="none" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-            <path d={HANG} />
-            <g fill="var(--accent)" fillOpacity=".28">{HANG_LEAVES.map((d) => <path key={d} d={d} />)}</g>
-            <g stroke="var(--seal)" strokeWidth="1.2">{HANG_ROSES.map((t) => <path key={t} transform={t} d={ROSE} />)}</g>
           </g>
         </symbol>
       </defs>

@@ -2,56 +2,40 @@
 import { useState } from "react";
 import { useOpening } from "./useOpening";
 import { CornerVines, Ornaments } from "./ornaments";
-import { WaxSeal } from "./Guestbook";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
-// Gold vine line art on the two paper panels: it grows from the top-left corner of the left
-// panel and the bottom-right corner of the right one.
-const PANEL_VINES = {
-  left: {
-    path: "M0 0 C 30 50, 70 60, 80 110 S 110 170, 90 210 M0 0 C 40 10, 80 0, 110 40 M80 110 C 100 100, 120 110, 140 100 M90 210 C 70 220, 60 240, 40 250",
-    leaves: ["M50 68 q-10 12 -22 2 q12 -10 22 -2z", "M68 88 q12 8 4 20 q-10 -8 -4 -20z", "M92 142 q-12 6 -18 -6 q12 -6 18 6z", "M102 180 q12 6 6 18 q-10 -6 -6 -18z", "M122 104 q8 12 -6 16 q-6 -12 6 -16z", "M62 230 q-12 6 -18 -6 q12 -6 18 6z", "M90 28 q8 12 -6 16 q-6 -12 6 -16z"],
-    align: "xMinYMin", pos: { left: 0, top: 0 },
-  },
-  right: {
-    path: "M200 300 C 170 250, 130 240, 120 190 S 90 130, 110 90 M200 300 C 160 290, 120 300, 90 260 M120 190 C 100 200, 80 190, 60 200 M110 90 C 130 80, 140 60, 160 50",
-    leaves: ["M150 232 q10 -12 22 -2 q-12 10 -22 2z", "M132 212 q-12 -8 -4 -20 q10 8 4 20z", "M108 158 q12 -6 18 6 q-12 6 -18 -6z", "M98 120 q-12 -6 -6 -18 q10 6 6 18z", "M78 196 q-8 -12 6 -16 q6 12 -6 16z", "M138 70 q12 -6 18 6 q-12 6 -18 -6z", "M110 272 q-8 -12 6 -16 q6 12 -6 16z"],
-    align: "xMaxYMax", pos: { right: 0, bottom: 0 },
-  },
-} as const;
+// Static design-2 artwork (cut from the reference card): the seal photo and the vine line art
+// as alpha masks, so the vines take the couple's accent color.
+const ART = "/design2";
+const SEAM = "53.5%"; // the fold sits slightly right of centre, like the reference stationery
 
-function PanelVine({ side }: { side: "left" | "right" }) {
-  const v = PANEL_VINES[side];
+/** Gold vine line art laid over a paper panel: an alpha mask tinted with the accent color,
+ *  anchored to the panel's outer corner so it hugs the edge at any viewport size. */
+function PanelVines({ side }: { side: "left" | "right" }) {
+  const url = `url(${ART}/vine-${side}.png)`;
+  const pos = side === "left" ? "left top" : "right bottom";
   return (
-    <svg viewBox="0 0 200 300" preserveAspectRatio={`${v.align} meet`} aria-hidden style={{ position: "absolute", ...v.pos, width: "100%", height: "60%" }} fill="none" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round">
-      <path d={v.path} />
-      <g fill="var(--accent)" fillOpacity=".35">{v.leaves.map((d) => <path key={d} d={d} />)}</g>
-    </svg>
+    <div aria-hidden style={{ position: "absolute", inset: 0, background: "var(--accent)", opacity: 0.92, WebkitMaskImage: url, maskImage: url, WebkitMaskSize: "contain", maskSize: "contain", WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskPosition: pos, maskPosition: pos }} />
   );
 }
 
 /** One half of the wax seal, clipped to its panel so it travels with the door and cracks apart
- *  (a few px and degrees) in the first moments of opening. Both halves carry the same sheen, in
- *  sync, so it reads as one candlelight sweep across the whole seal. */
-function SealHalf({ side, crack }: { side: "left" | "right"; crack: number }) {
+ *  (a few px and degrees) in the first moments of opening. */
+function SealHalf({ side, src, crack }: { side: "left" | "right"; src: string; crack: number }) {
   const s = side === "right" ? 1 : -1;
   return (
-    <div style={{ position: "absolute", [side === "right" ? "left" : "right"]: -48, top: "50%", width: 96, height: 96, marginTop: -48, clipPath: side === "right" ? "inset(0 0 0 50%)" : "inset(0 50% 0 0)", transform: `translateX(${(s * crack * 3).toFixed(2)}px) rotate(${(s * crack * 5).toFixed(2)}deg)` }}>
-      <WaxSeal size="100%" stamp={false} />
-      <div style={{ position: "absolute", inset: 0, borderRadius: "50%", overflow: "hidden", pointerEvents: "none" }}>
-        <div style={{ position: "absolute", top: "-20%", left: 0, width: "45%", height: "140%", background: "linear-gradient(90deg, rgba(255,240,220,0), rgba(255,240,220,.45), rgba(255,240,220,0))", animation: "sheen 4.5s ease-in-out infinite" }} />
-      </div>
+    <div style={{ position: "absolute", [side === "right" ? "left" : "right"]: "calc(var(--seal-size) / -2)", top: "50%", width: "var(--seal-size)", height: "var(--seal-size)", marginTop: "calc(var(--seal-size) / -2)", clipPath: side === "right" ? "inset(0 0 0 50%)" : "inset(0 50% 0 0)", transform: `translateX(${(s * crack * 3).toFixed(2)}px) rotate(${(s * crack * 5).toFixed(2)}deg)`, filter: "drop-shadow(0 6px 10px rgba(60,10,10,.35))" }}>
+      <img src={src} alt="" aria-hidden draggable={false} style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }} />
     </div>
   );
 }
 
-type Props = { a: string; b: string; image: string; hint: string; rtl: boolean };
+type Props = { a: string; b: string; image: string; seal?: string; hint: string; rtl: boolean };
 
-/** Design 2 opener: a sealed cream card in a candlelit night. Scrolling (or a tap) cracks the
- *  seal, swings both panels open in 3D and scales the card up so the guest passes through it
- *  into the blurred ballroom, where the names write in. */
-export default function Invitation({ a, b, image, hint, rtl }: Props) {
+/** Design 2 opener: the sealed cream card fills the screen. Scrolling (or a tap) cracks the seal
+ *  and swings both panels open in 3D onto the blurred ballroom, where the names write in. */
+export default function Invitation({ a, b, image, seal = `${ART}/seal.png`, hint, rtl }: Props) {
   const { ref, p: raw, openCard } = useOpening();
   // Read once at init: it only changes derived numbers after the first scroll, so hydration
   // (where p is 0 on both sides) is unaffected.
@@ -90,38 +74,26 @@ export default function Invitation({ a, b, image, hint, rtl }: Props) {
           </div>
         </div>
 
-        {/* Night with a breathing candle glow; fades away as the doors open */}
-        <div style={{ position: "absolute", inset: 0, background: "var(--bg)", opacity: 1 - clamp((p - 0.05) / 0.5, 0, 1), pointerEvents: "none" }}>
-          <div style={{ position: "absolute", left: "50%", top: "50%", width: "min(120vw,900px)", height: "min(120vw,900px)", transform: "translate(-50%,-50%)", background: "radial-gradient(circle, color-mix(in srgb, var(--candle) 22%, transparent) 0%, color-mix(in srgb, var(--seal) 12%, transparent) 35%, transparent 70%)", animation: "glow 6s ease-in-out infinite" }} />
-        </div>
-
-        {/* Hanging florals on the landing */}
-        <div aria-hidden style={{ position: "absolute", inset: 0, opacity: 1 - clamp(p / 0.3, 0, 1), pointerEvents: "none", filter: "drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 30%, transparent))" }}>
-          <svg style={{ position: "absolute", left: "2%", top: -8, width: "min(28vw,200px)", height: "min(46vw,330px)", animation: "sway 7s ease-in-out infinite", transformOrigin: "top center" }}><use href="#hang" /></svg>
-          <svg style={{ position: "absolute", right: "2%", top: -8, width: "min(28vw,200px)", height: "min(46vw,330px)", transform: "scaleX(-1)", animation: "sway 8.5s ease-in-out -2s infinite reverse", transformOrigin: "top center" }}><use href="#hang" /></svg>
-        </div>
-
-        {/* The card */}
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22, perspective: 1400, opacity: 1 - clamp((p - 0.8) / 0.15, 0, 1), pointerEvents: p > 0.9 ? "none" : "auto" }}>
-          <button
-            type="button" aria-label="Open invitation" onClick={openCard}
-            style={{ position: "relative", display: "block", height: "min(72vh,740px)", aspectRatio: "9 / 16", maxWidth: "88vw", border: 0, padding: 0, background: "transparent", cursor: "pointer", transform: `scale(${(1 + open * 1.8).toFixed(3)})`, transformStyle: "preserve-3d", willChange: "transform" }}
-          >
-            {/* right panel */}
-            <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "44%", background: `linear-gradient(90deg, ${paperEdge}, var(--paper) 40%, var(--paper))`, transformOrigin: "right center", transform: `rotateY(${(open * 112).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: "inset 6px 0 14px -8px rgba(80,30,10,.35)" }}>
-              <PanelVine side="right" />
-              <SealHalf side="right" crack={crack} />
-            </div>
-            {/* left panel, overlapping the seam */}
-            <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: "56.5%", background: `linear-gradient(270deg, ${paperEdge}, var(--paper) 30%, var(--paper))`, transformOrigin: "left center", transform: `rotateY(${(-open * 112).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: "8px 0 18px -6px rgba(60,20,8,.45)" }}>
-              <PanelVine side="left" />
-              <SealHalf side="left" crack={crack} />
-            </div>
-          </button>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, color: "var(--accent)", fontStyle: "italic", fontSize: 15, letterSpacing: ".04em", opacity: 1 - clamp(p / 0.15, 0, 1) }}>
-            <span>{hint}</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "bob 1.8s ease-in-out infinite" }}><path d="m6 9 6 6 6-6" /></svg>
+        {/* The card: two full-height paper panels meeting on the fold, doors that swing open in 3D */}
+        <button
+          type="button" aria-label="Open invitation" onClick={openCard}
+          style={{ "--seal-size": "clamp(150px, 42vw, 300px)", position: "absolute", inset: 0, display: "block", border: 0, padding: 0, margin: 0, background: "transparent", cursor: "pointer", perspective: "max(1400px, 110vw)", transformStyle: "preserve-3d", transform: `scale(${(1 + open * 0.12).toFixed(3)})`, opacity: 1 - clamp((p - 0.8) / 0.15, 0, 1), pointerEvents: p > 0.9 ? "none" : "auto", willChange: "transform, opacity" } as React.CSSProperties}
+        >
+          {/* right panel */}
+          <div style={{ position: "absolute", top: 0, bottom: 0, left: SEAM, right: 0, overflow: "hidden", background: `linear-gradient(90deg, ${paperEdge}, var(--paper) 12%, var(--paper))`, transformOrigin: "right center", transform: `rotateY(${(open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: "inset 10px 0 18px -10px rgba(80,30,10,.35)" }}>
+            <PanelVines side="right" />
+            <SealHalf side="right" src={seal} crack={crack} />
           </div>
+          {/* left panel: its right edge is the fold, shadowed onto the right panel */}
+          <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: SEAM, overflow: "hidden", background: `linear-gradient(270deg, ${paperEdge}, var(--paper) 8%, var(--paper))`, transformOrigin: "left center", transform: `rotateY(${(-open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: "10px 0 22px -8px rgba(60,20,8,.45)" }}>
+            <PanelVines side="left" />
+            <SealHalf side="left" src={seal} crack={crack} />
+          </div>
+        </button>
+
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 28, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, color: "var(--primary)", fontStyle: "italic", fontSize: 15, letterSpacing: ".04em", opacity: 1 - clamp(p / 0.15, 0, 1), pointerEvents: "none" }}>
+          <span>{hint}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "bob 1.8s ease-in-out infinite" }}><path d="m6 9 6 6 6-6" /></svg>
         </div>
       </div>
     </section>

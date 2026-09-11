@@ -93,7 +93,7 @@ export default async function Page(props: Props) {
       )}
 
       {d2 ? (
-        <Invitation a={c.couple.a} b={c.couple.b} image={assetUrl(c.hero.image)} hint={c.hero.scrollCue} rtl={rtl} />
+        <Invitation a={c.couple.a} b={c.couple.b} image={assetUrl(c.hero.image)} seal={c.hero.overlay ? assetUrl(c.hero.overlay) : undefined} hint={c.hero.scrollCue} rtl={rtl} />
       ) : (
         <Hero
           a={c.couple.a} b={c.couple.b} dateLine={dateLine} kicker={s.kicker}

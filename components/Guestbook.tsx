@@ -5,11 +5,11 @@ import type { Message, Strings } from "@/lib/wedding";
 
 const MAX = 300;
 
-export function WaxSeal({ size = 64, stamp = true }: { size?: number | string; stamp?: boolean }) {
-  // Unique gradient id: the page can hold several seals (the card's two halves plus this one).
+export function WaxSeal({ size = 64 }: { size?: number }) {
+  // Unique gradient id: the page can hold several seals (guestbook and memories).
   const id = "wx" + useId().replace(/\W/g, "");
   return (
-    <svg viewBox="0 0 100 100" style={{ width: size, height: size, filter: "drop-shadow(0 3px 4px rgba(60,0,8,.45))", animation: stamp ? "stamp .6s cubic-bezier(.2,.9,.3,1.3) both" : undefined }} aria-hidden>
+    <svg viewBox="0 0 100 100" style={{ width: size, height: size, filter: "drop-shadow(0 3px 4px rgba(60,0,8,.45))", animation: "stamp .6s cubic-bezier(.2,.9,.3,1.3) both" }} aria-hidden>
       <defs><radialGradient id={id} gradientUnits="userSpaceOnUse" cx="38" cy="32" r="62"><stop offset="0" stopColor="color-mix(in srgb, var(--seal) 70%, #ff4050)" /><stop offset=".55" stopColor="var(--seal)" /><stop offset="1" stopColor="color-mix(in srgb, var(--seal) 70%, black)" /></radialGradient></defs>
       <g fill={`url(#${id})`}><circle cx="50" cy="50" r="40" />{[[50, 12], [77, 23], [88, 50], [77, 77], [50, 88], [23, 77], [12, 50], [23, 23]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="15" />)}</g>
       <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0,0,0,.35)" strokeWidth="1.6" />
