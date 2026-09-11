@@ -37,15 +37,15 @@ export default function Countdown({ iso, locale, strings: s, children }: Props) 
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h2 className="w-h2">{s.countdownTitle}</h2>
 
-        <div style={{ width: "min(470px,100%)", borderRadius: 28, overflow: "hidden", border: "1px solid var(--hairline)", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--ink) 35%, transparent)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", padding: "20px 56px", background: "var(--ink)", color: "var(--text-on-dark)" }}>
+        <div style={{ width: "min(470px,100%)", borderRadius: 28, overflow: "hidden", border: "1px solid var(--hairline)", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--shade) 35%, transparent)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", padding: "20px 56px", background: "var(--shade)", color: "var(--text-on-dark)" }}>
             <span style={{ textAlign: "start", fontSize: 13, letterSpacing: ".3em" }}>{ev.year}</span>
             <span style={{ fontSize: "clamp(20px,3vw,27px)", fontWeight: 600, letterSpacing: ".14em", color: "var(--accent)", textTransform: "uppercase" }}>{ev.month}</span>
             <span style={{ textAlign: "end", fontSize: 13, letterSpacing: ".3em", textTransform: "uppercase" }}>{ev.wdShort}</span>
           </div>
-          <div style={{ padding: "36px 24px 30px", background: "var(--bg)", color: "var(--ink)" }}>
+          <div style={{ padding: "36px 24px 30px", background: "var(--paper)", color: "var(--paper-ink)" }}>
             <div style={{ fontSize: "clamp(96px,16vw,124px)", fontWeight: 400, lineHeight: 1, letterSpacing: "-.02em", fontVariantNumeric: "oldstyle-nums" }}>{ev.day}</div>
-            <div style={{ width: 64, height: 1, background: "color-mix(in srgb, var(--ink) 25%, transparent)", margin: "26px auto 18px" }} />
+            <div style={{ width: 64, height: 1, background: "color-mix(in srgb, var(--paper-ink) 25%, transparent)", margin: "26px auto 18px" }} />
             <div style={{ fontSize: 19, letterSpacing: ".32em", textTransform: "uppercase" }}>{ev.weekday}</div>
             <div style={{ fontSize: 28, marginTop: 10, fontVariantNumeric: "oldstyle-nums" }}>{ev.time}</div>
           </div>

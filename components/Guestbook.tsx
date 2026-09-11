@@ -1,15 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Message, Strings } from "@/lib/wedding";
 
 const MAX = 300;
 
-export function WaxSeal({ size = 64 }: { size?: number }) {
+export function WaxSeal({ size = 64, stamp = true }: { size?: number | string; stamp?: boolean }) {
+  // Unique gradient id: the page can hold several seals (the card's two halves plus this one).
+  const id = "wx" + useId().replace(/\W/g, "");
   return (
-    <svg viewBox="0 0 100 100" style={{ width: size, height: size, filter: "drop-shadow(0 3px 4px rgba(60,0,8,.45))", animation: "stamp .6s cubic-bezier(.2,.9,.3,1.3) both" }} aria-hidden>
-      <defs><radialGradient id="wxs" gradientUnits="userSpaceOnUse" cx="38" cy="32" r="62"><stop offset="0" stopColor="color-mix(in srgb, var(--primary) 70%, #ff4050)" /><stop offset=".55" stopColor="var(--primary)" /><stop offset="1" stopColor="color-mix(in srgb, var(--primary) 70%, black)" /></radialGradient></defs>
-      <g fill="url(#wxs)"><circle cx="50" cy="50" r="40" />{[[50, 12], [77, 23], [88, 50], [77, 77], [50, 88], [23, 77], [12, 50], [23, 23]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="15" />)}</g>
+    <svg viewBox="0 0 100 100" style={{ width: size, height: size, filter: "drop-shadow(0 3px 4px rgba(60,0,8,.45))", animation: stamp ? "stamp .6s cubic-bezier(.2,.9,.3,1.3) both" : undefined }} aria-hidden>
+      <defs><radialGradient id={id} gradientUnits="userSpaceOnUse" cx="38" cy="32" r="62"><stop offset="0" stopColor="color-mix(in srgb, var(--seal) 70%, #ff4050)" /><stop offset=".55" stopColor="var(--seal)" /><stop offset="1" stopColor="color-mix(in srgb, var(--seal) 70%, black)" /></radialGradient></defs>
+      <g fill={`url(#${id})`}><circle cx="50" cy="50" r="40" />{[[50, 12], [77, 23], [88, 50], [77, 77], [50, 88], [23, 77], [12, 50], [23, 23]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="15" />)}</g>
       <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0,0,0,.35)" strokeWidth="1.6" />
       <g fill="none" stroke="rgba(0,0,0,.35)" strokeWidth="2.2" strokeLinecap="round"><path d="M50 62 C 44 60, 42 52, 47 48 C 52 44, 58 47, 56 53 C 54 58, 47 57, 48 52 C 49 49, 53 50, 52 53" /><path d="M50 62 C 48 70, 44 74, 38 80" /><path d="M44 71 c -6 -2 -10 2 -12 6 c 6 2 10 -1 12 -6z" /><path d="M47 66 c 6 -2 10 2 12 6 c -6 2 -10 -1 -12 -6z" /></g>
       <ellipse cx="38" cy="30" rx="16" ry="8" fill="#fff" opacity=".22" transform="rotate(-25 38 30)" />
@@ -52,9 +54,9 @@ export default function Guestbook({ weddingId, coupleLine, bg, initial, strings:
     <section style={{ position: "relative", padding: "120px 16px 140px", overflow: "hidden" }}>
       <img src={bg} alt="" aria-hidden loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
       {/* Dark fade over the photo, independent of the page's light theme, so the card below reads clearly. */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--ink) 18%, transparent) 0%, color-mix(in srgb, var(--ink) 55%, transparent) 35%, color-mix(in srgb, var(--ink) 80%, transparent) 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--shade) 18%, transparent) 0%, color-mix(in srgb, var(--shade) 55%, transparent) 35%, color-mix(in srgb, var(--shade) 80%, transparent) 100%)" }} />
 
-      <form onSubmit={submit} noValidate style={{ position: "relative", width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, background: "var(--glass-strong)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--glass-border)", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--ink) 45%, transparent)", display: "flex", flexDirection: "column", gap: 18, textAlign: "start" }}>
+      <form onSubmit={submit} noValidate style={{ position: "relative", width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, background: "var(--glass-strong)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--glass-border)", borderTopColor: "var(--glass-top)", boxShadow: "var(--glass-glow), 0 30px 60px -20px color-mix(in srgb, var(--shade) 45%, transparent)", display: "flex", flexDirection: "column", gap: 18, textAlign: "start" }}>
         <div style={{ textAlign: "center" }}>
           <h2 style={{ margin: 0, fontWeight: 400, fontSize: "clamp(30px,4vw,38px)", lineHeight: 1.15, color: "var(--ink)" }}>{s.guestbookTitle}</h2>
           <p style={{ margin: "6px 0 0", fontStyle: "italic", color: "var(--soft)" }}>{s.guestbookSub}</p>

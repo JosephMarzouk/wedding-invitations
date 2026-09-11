@@ -54,7 +54,7 @@ export default function Gallery({ photos, alt }: { photos: string[]; alt: string
   const pos = desk ? DESKTOP : MOBILE;
 
   return (
-    <section style={{ position: "relative", padding: "40px 16px 80px", background: "radial-gradient(ellipse 55% 40% at 22% 25%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 65%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%), var(--bg-secondary)" }}>
+    <section style={{ position: "relative", padding: "40px 16px 80px", background: "radial-gradient(ellipse 55% 40% at 22% 25%, var(--glow), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 65%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%), var(--bg-secondary)" }}>
       <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", height: base * rows, perspective: 1000 }}>
         {photos.map((src, i) => {
           const c = cards[i] ?? idle();
@@ -65,7 +65,7 @@ export default function Gallery({ photos, alt }: { photos: string[]; alt: string
                 role="img" aria-label={`${alt} — ${i + 1}`}
                 onPointerMove={(e) => onMove(i, e)} onPointerDown={(e) => onDown(i, e)} onPointerUp={() => onUp(i)} onPointerCancel={() => onUp(i)} onPointerLeave={() => onLeave(i)}
                 style={{
-                  background: "var(--bg)", padding: "8px 8px 16px", border: "1px solid var(--accent)",
+                  background: "var(--paper)", padding: "8px 8px 16px", border: "1px solid var(--accent)",
                   boxShadow: c.active ? "0 40px 70px -20px rgba(0,0,0,.75), 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent)" : "0 24px 50px -18px rgba(0,0,0,.7)",
                   transform: `translate(${c.tx}px,${c.ty}px) rotate(${ROT[k]}deg) rotateX(${c.rx}deg) rotateY(${c.ry}deg) scale(${c.s})`,
                   transition: c.active ? "box-shadow .3s" : "transform .8s cubic-bezier(.34,1.56,.64,1), box-shadow .5s",

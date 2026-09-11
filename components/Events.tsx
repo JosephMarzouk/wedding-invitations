@@ -8,10 +8,10 @@ function VenueCard({ ev, image, locale, city, s }: { ev: Ev; image: string; loca
   const secondary = ar ? (ev.titleAr ? ev.title : undefined) : ev.titleAr;
   return (
     <div style={{ width: "min(520px,100%)", margin: "0 auto", display: "flex", flexDirection: "column", gap: 14 }}>
-      <div style={{ position: "relative", height: "min(78vh,620px)", borderRadius: 28, overflow: "hidden", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--ink) 45%, transparent)" }}>
+      <div style={{ position: "relative", height: "min(78vh,620px)", borderRadius: 28, overflow: "hidden", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--shade) 45%, transparent)" }}>
         <img src={image} alt="" loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} />
         {/* Dark fade (not the light page bg) so the text below stays readable over the photo. */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--ink) 4%, transparent) 30%, color-mix(in srgb, var(--ink) 55%, transparent) 65%, color-mix(in srgb, var(--ink) 88%, transparent) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--shade) 4%, transparent) 30%, color-mix(in srgb, var(--shade) 55%, transparent) 65%, color-mix(in srgb, var(--shade) 88%, transparent) 100%)" }} />
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "0 28px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           <div style={{ fontSize: 12, letterSpacing: ".32em", textTransform: "uppercase", color: "var(--accent)" }}>{ev.type}</div>
           <h2 style={{ margin: 0, fontWeight: 400, fontSize: "clamp(26px,4vw,34px)", lineHeight: 1.15, color: "var(--text-on-dark)", textWrap: "balance" }}>{main}</h2>
@@ -44,7 +44,7 @@ export default function Events({ events, images, locale, city, strings }: Props)
   return (
     <section style={{ position: "relative", padding: "40px 16px 110px", background: "var(--bg-secondary)", display: "flex", flexDirection: "column", gap: 40 }}>
       {events.map((ev, i) => (
-        <VenueCard key={ev.title + i} ev={ev} image={images[i % images.length]} locale={locale} city={city} s={strings} />
+        <VenueCard key={ev.title + i} ev={ev} image={ev.image ?? images[i % images.length]} locale={locale} city={city} s={strings} />
       ))}
     </section>
   );
