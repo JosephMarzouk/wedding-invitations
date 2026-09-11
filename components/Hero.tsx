@@ -120,12 +120,12 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
           style={{ position: "absolute", inset: 0, display: "block", border: 0, padding: 0, margin: 0, background: "transparent", cursor: "pointer", perspective: 1600, transformStyle: "preserve-3d", opacity: 1 - clamp((p - 0.85) / 0.12, 0, 1), pointerEvents: p > 0.85 ? "none" : "auto" }}
         >
           {/* end panel (42%) */}
-          <div style={{ position: "absolute", top: 0, bottom: 0, [end]: 0, width: "42%", background: `linear-gradient(to ${end}, color-mix(in srgb, var(--primary) 96%, white) 0%, var(--primary) 82%, color-mix(in srgb, var(--primary) 70%, black) 100%)`, transformOrigin: `${end} center`, transform: `rotateY(${(dir * open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: `inset ${dir * 40}px 0 60px -30px rgba(0,0,0,.75)` }}>
+          <div style={{ position: "absolute", top: 0, bottom: 0, [end]: 0, width: "42%", background: `linear-gradient(to ${end}, color-mix(in srgb, var(--primary) 96%, white) 0%, var(--primary) 82%, color-mix(in srgb, var(--primary) 70%, black) 100%)`, transformOrigin: `${end} center`, transform: `rotateY(${(dir * open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: `inset ${dir * 18}px 0 26px -18px rgba(0,0,0,.4)` }}>
             <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 2, marginTop: -6, background: "linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, black), var(--accent))", transform: `rotate(${-dir * 1.2}deg)`, transformOrigin: `${start} center` }} />
             <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 1.5, marginTop: 6, background: "linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, black), var(--accent))", transform: `rotate(${dir * 1.4}deg)`, transformOrigin: `${start} center` }} />
           </div>
           {/* start panel (58%) with bouquet + seal */}
-          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: 0, width: "58%", background: `linear-gradient(to ${end}, color-mix(in srgb, var(--primary) 96%, white) 0%, var(--primary) 80%, color-mix(in srgb, var(--primary) 80%, black) 100%)`, transformOrigin: `${start} center`, transform: `rotateY(${(-dir * open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: `${dir * 24}px 0 50px -10px rgba(0,0,0,.7)` }}>
+          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: 0, width: "58%", background: `linear-gradient(to ${end}, color-mix(in srgb, var(--primary) 96%, white) 0%, var(--primary) 80%, color-mix(in srgb, var(--primary) 80%, black) 100%)`, transformOrigin: `${start} center`, transform: `rotateY(${(-dir * open * 100).toFixed(2)}deg)`, backfaceVisibility: "hidden", boxShadow: `${dir * 10}px 0 20px -6px rgba(0,0,0,.35)` }}>
             <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 2, marginTop: -6, background: "linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, black))", transform: `rotate(${dir * 1.2}deg)`, transformOrigin: `${end} center` }} />
             <div style={{ position: "absolute", left: 0, right: 0, top: "50%", height: 1.5, marginTop: 6, background: "linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, black))", transform: `rotate(${-dir * 1.4}deg)`, transformOrigin: `${end} center` }} />
             <svg viewBox="0 0 200 320" aria-hidden style={{ position: "absolute", left: "50%", top: "50%", width: "min(44vw,260px)", height: "auto", transform: "translate(-56%,-58%)" }} fill="none" stroke="color-mix(in srgb, var(--accent) 80%, white)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -144,7 +144,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
               </div>
             </div>
           </div>
-          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "14%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.55) 50%, rgba(0,0,0,0))", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "8%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.22) 50%, rgba(0,0,0,0))", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
         </button>
 
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 28, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, color: "var(--accent)", fontStyle: "italic", fontSize: 15, letterSpacing: ".04em", opacity: 1 - clamp(p / 0.15, 0, 1), pointerEvents: "none" }}>
