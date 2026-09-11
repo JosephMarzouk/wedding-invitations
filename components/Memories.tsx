@@ -18,7 +18,6 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
   const canvas = useRef<HTMLCanvasElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const [mode, setMode] = useState<"idle" | "live" | "shot" | "sending" | "done">("idle");
-  const [camera, setCamera] = useState(true); // false -> fall back to <input capture>
   const [name, setName] = useState("");
   const [err, setErr] = useState("");
   const [list, setList] = useState(initial);
@@ -34,7 +33,7 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
       setMode("live");
       requestAnimationFrame(() => { if (video.current) { video.current.srcObject = st; video.current.play().catch(() => {}); } });
     } catch {
-      setCamera(false);
+      setErr(s.cameraError);
     }
   };
 
@@ -113,12 +112,16 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
         )}
         {err && <span role="alert" className="w-err">{err}</span>}
 
-        {mode === "idle" && camera && <button type="button" className="w-btn" onClick={openCamera}>{s.openCamera}</button>}
-        {mode === "idle" && !camera && (
-          <label className="w-btn" style={{ cursor: "pointer" }}>
-            {s.cameraFallback}
-            <input type="file" accept="image/*" capture="environment" onChange={(e) => onFile(e.target.files?.[0])} style={{ position: "absolute", width: 1, height: 1, opacity: 0 }} />
-          </label>
+        {mode === "idle" && (
+          <div style={{ display: "flex", gap: 12 }}>
+            <button type="button" className="w-btn" onClick={openCamera} style={{ flex: 1 }}>{s.openCamera}</button>
+            {/* No `capture` attribute here (unlike the old fallback) so the OS picker offers the
+                photo library, not just the camera — this is the "upload from gallery" path. */}
+            <label className="w-pill" style={{ flex: 1, cursor: "pointer", justifyContent: "center", padding: "16px 20px", position: "relative" }}>
+              {s.chooseFromGallery}
+              <input type="file" accept="image/*" onChange={(e) => onFile(e.target.files?.[0])} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }} />
+            </label>
+          </div>
         )}
         {mode === "live" && <button type="button" className="w-btn" onClick={takePhoto}>{s.takePhoto}</button>}
         {(mode === "shot" || mode === "sending") && (

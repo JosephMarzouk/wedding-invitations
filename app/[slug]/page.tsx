@@ -14,6 +14,7 @@ import Guestbook from "@/components/Guestbook";
 import Memories from "@/components/Memories";
 import Music from "@/components/Music";
 import Reveal from "@/components/Reveal";
+import ClosingNote from "@/components/ClosingNote";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -117,6 +118,9 @@ export default async function Page(props: Props) {
           <Memories weddingId={w.id} coupleLine={coupleLine} dateLine={dateLine} initial={(memories?.data ?? []) as Memory[]} strings={s} />
         </Reveal>
       )}
+      <Reveal>
+        <ClosingNote text={s.waitingForYou} />
+      </Reveal>
       {c.music?.url && <Music src={remoteAssetUrl(c.music.url)} autoplayOnTap={c.music.autoplayOnTap} playLabel={s.playMusic} pauseLabel={s.pauseMusic} rtl={rtl} />}
     </div>
   );
