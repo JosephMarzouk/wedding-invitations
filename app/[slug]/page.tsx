@@ -3,7 +3,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { assetUrl, eventParts, t, type Memory, type Message, type Wedding } from "@/lib/wedding";
+import { assetUrl, eventParts, remoteAssetUrl, t, type Memory, type Message, type Wedding } from "@/lib/wedding";
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
 import Gallery from "@/components/Gallery";
@@ -104,7 +104,7 @@ export default async function Page(props: Props) {
       {c.features.memories && (
         <Memories weddingId={w.id} coupleLine={coupleLine} dateLine={dateLine} initial={(memories?.data ?? []) as Memory[]} strings={s} />
       )}
-      {c.music?.url && <Music src={assetUrl(c.music.url)} autoplayOnTap={c.music.autoplayOnTap} playLabel={s.playMusic} pauseLabel={s.pauseMusic} rtl={rtl} />}
+      {c.music?.url && <Music src={remoteAssetUrl(c.music.url)} autoplayOnTap={c.music.autoplayOnTap} playLabel={s.playMusic} pauseLabel={s.pauseMusic} rtl={rtl} />}
     </div>
   );
 }

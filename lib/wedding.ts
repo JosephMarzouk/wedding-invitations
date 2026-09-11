@@ -24,13 +24,22 @@ export type Wedding = {
 export type Message = { id: string; guest_name: string; body: string; created_at: string };
 export type Memory = { id: string; storage_path: string; guest_name: string | null; created_at: string };
 
+const publicStorageUrl = (path: string) => `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${path}`;
+
 /** Config paths are `bucket/dir/file`; resolved against Supabase public storage.
  *  NEXT_PUBLIC_ASSET_BASE (dev) maps `bucket/<wedding_id>/x` -> `${base}/x`. */
 export function assetUrl(path: string) {
   if (/^(https?:)?\/\//.test(path) || path.startsWith("/")) return path;
   const base = process.env.NEXT_PUBLIC_ASSET_BASE;
   if (base) return `${base}/${path.split("/").slice(2).join("/")}`;
-  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${path}`;
+  return publicStorageUrl(path);
+}
+
+/** Always resolves against real Supabase storage, ignoring NEXT_PUBLIC_ASSET_BASE.
+ *  Use for assets (e.g. music) that have no local dev placeholder to fall back to. */
+export function remoteAssetUrl(path: string) {
+  if (/^(https?:)?\/\//.test(path) || path.startsWith("/")) return path;
+  return publicStorageUrl(path);
 }
 
 /** Calendar parts of the wedding date in the couple's own timezone (the ISO offset). */
