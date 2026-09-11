@@ -73,8 +73,10 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
         {/* Names scene behind the doors */}
         <div style={{ position: "absolute", inset: 0, background: "var(--bg)" }}>
           <img src={image} alt="" aria-hidden style={{ position: "absolute", inset: "-6%", width: "112%", height: "112%", objectFit: "cover", filter: "blur(18px) saturate(.9)", transform: `scale(${(1.1 - 0.1 * p).toFixed(3)})`, transformOrigin: "center", willChange: "transform" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--bg) 72%, transparent) 0%, color-mix(in srgb, var(--primary) 30%, color-mix(in srgb, var(--bg) 55%, transparent)) 45%, color-mix(in srgb, var(--bg) 90%, transparent) 100%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--primary) 35%, transparent), transparent 18%), radial-gradient(circle at 84% 72%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 16%), radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--candle) 14%, transparent), transparent 12%)" }} />
+          {/* Always a dark fade here, regardless of the page's light theme — the names sitting on
+              this photo need that contrast, per "add a dark overlay behind text over images". */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--ink) 55%, transparent) 0%, color-mix(in srgb, var(--ink) 42%, transparent) 45%, color-mix(in srgb, var(--ink) 82%, transparent) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--primary) 35%, transparent), transparent 18%), radial-gradient(circle at 84% 72%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 16%), radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 12%)" }} />
 
           <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
             <defs>
@@ -106,7 +108,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
               <div style={{ fontStyle: "italic", fontSize: "clamp(28px,4vw,44px)", color: "var(--accent)", lineHeight: 1, margin: "4px 0 8px" }}>&amp;</div>
               <div style={nameStyle}>{b}</div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: "clamp(10px,2.5vh,28px)", color: "var(--soft)", fontSize: "clamp(14px,1.8vw,18px)", letterSpacing: ".3em", fontVariantNumeric: "oldstyle-nums", opacity: ornament, transition: "opacity .4s" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: "clamp(10px,2.5vh,28px)", color: "var(--accent)", textShadow: "0 1px 3px color-mix(in srgb, var(--ink) 60%, transparent)", fontSize: "clamp(14px,1.8vw,18px)", letterSpacing: ".3em", fontVariantNumeric: "oldstyle-nums", opacity: ornament, transition: "opacity .4s" }}>
               <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="var(--accent)" strokeWidth="1.2" strokeLinecap="round"><path transform="translate(9 12)" d={ROSE_SM} /></svg>
               <span>{dateLine}</span>
               <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="var(--accent)" strokeWidth="1.2" strokeLinecap="round" style={{ transform: "scaleX(-1)" }}><path transform="translate(9 12)" d={ROSE_SM} /></svg>
@@ -144,7 +146,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
               </div>
             </div>
           </div>
-          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "8%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.22) 50%, rgba(0,0,0,0))", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "8%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink) 25%, transparent) 50%, transparent)", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
         </button>
 
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 28, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, color: "var(--accent)", fontStyle: "italic", fontSize: 15, letterSpacing: ".04em", opacity: 1 - clamp(p / 0.15, 0, 1), pointerEvents: "none" }}>

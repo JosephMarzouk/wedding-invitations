@@ -3,17 +3,30 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; -webkit-font-smoothing: antialiased; }
 
-/* Per-couple theme: --bg/--ink/--primary/--accent/--font-latin/--font-arabic are set inline on .wedding.
-   Everything below is derived so re-theming needs no code changes. */
+/* Per-couple theme: --bg/--ink/--primary/--accent/--font-latin/--font-arabic are set inline on .wedding
+   (bg = page background, ink = primary text, primary = dark/solid accent fill, accent = decorative gold).
+   The unified system layer below (text-secondary/muted/on-dark, bg-secondary) is fixed by design, not
+   per-couple, so every wedding reads as the same elegant, minimal, WCAG-conscious system. */
 .wedding {
-  --candle: color-mix(in srgb, var(--ink) 55%, var(--accent));
-  --soft: color-mix(in srgb, var(--ink) 75%, var(--accent));
-  --on-primary: color-mix(in srgb, var(--accent) 30%, white);
-  --glass: color-mix(in srgb, var(--ink) 10%, transparent);
-  --glass-strong: color-mix(in srgb, var(--ink) 16%, transparent);
-  --glass-border: color-mix(in srgb, var(--ink) 22%, transparent);
-  --hairline: color-mix(in srgb, var(--accent) 50%, transparent);
-  --shade: color-mix(in srgb, var(--bg) 55%, transparent);
+  --bg-secondary: #EFE6D5;
+  --text-secondary: #6F6256;
+  --text-muted: #94877A;
+  --text-on-dark: #FFFDF8;
+
+  /* Aliases kept so existing component code reads by role, not by raw token name. */
+  --candle: var(--text-on-dark);   /* text placed over photos / dark overlays */
+  --soft: var(--text-secondary);   /* body copy, subtitles, descriptions */
+  --muted: var(--text-muted);      /* tertiary / meta text only */
+  --on-primary: var(--text-on-dark); /* text on a solid --primary (dark accent) fill */
+
+  --glass: color-mix(in srgb, var(--bg) 82%, transparent);
+  --glass-strong: color-mix(in srgb, var(--bg) 90%, transparent);
+  --glass-border: color-mix(in srgb, var(--ink) 14%, transparent);
+  --hairline: color-mix(in srgb, var(--accent) 55%, transparent);
+  /* Dark overlay for text over photos: ink at partial opacity (matches the requested
+     rgba(43,33,27,.35) exactly when ink is #2B211B) — never derived from the light bg. */
+  --overlay: color-mix(in srgb, var(--ink) 35%, transparent);
+
   --font-body: var(--font-latin), Georgia, serif;
   --font-script: "Pinyon Script", var(--font-latin), cursive;
   background: var(--bg);
@@ -27,16 +40,18 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 }
 .wedding[dir="rtl"] { --font-body: var(--font-arabic), var(--font-latin), serif; }
 .wedding a { color: var(--accent); }
-.wedding a:hover { color: var(--candle); }
+.wedding a:hover { color: var(--ink); }
 .wedding button, .wedding input, .wedding textarea { font-family: inherit; }
-.wedding input::placeholder, .wedding textarea::placeholder { color: color-mix(in srgb, var(--ink) 60%, transparent); }
+.wedding input::placeholder, .wedding textarea::placeholder { color: color-mix(in srgb, var(--ink) 55%, transparent); }
 .wedding :is(input, textarea, button, a):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .wedding :is(input, textarea):focus { outline: 2px solid var(--accent); outline-offset: 0; }
 
+/* Small decorative eyebrow line (dates, hints, kickers) — always the gold accent. */
 .w-kicker { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: var(--accent); }
 .w-kicker::before, .w-kicker::after { content: ""; width: clamp(30px, 8vw, 90px); height: 1px; background: linear-gradient(90deg, transparent, var(--hairline)); }
 .w-kicker::after { background: linear-gradient(90deg, var(--hairline), transparent); }
-.w-h2 { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 0 0 44px; font-weight: 400; font-size: clamp(22px, 3vw, 30px); letter-spacing: .28em; color: var(--soft); text-transform: uppercase; }
+/* Section title — a heading, so it takes primary text, not the accent. */
+.w-h2 { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 0 0 44px; font-weight: 400; font-size: clamp(22px, 3vw, 30px); letter-spacing: .28em; color: var(--ink); text-transform: uppercase; }
 .w-h2::before, .w-h2::after { content: ""; width: clamp(40px, 10vw, 120px); height: 1px; background: linear-gradient(90deg, transparent, var(--hairline)); }
 .w-h2::after { background: linear-gradient(90deg, var(--hairline), transparent); }
 .wedding[dir="rtl"] :is(.w-kicker, .w-h2)::before { background: linear-gradient(90deg, var(--hairline), transparent); }
@@ -47,10 +62,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 .w-btn:hover { background: color-mix(in srgb, var(--primary) 85%, white); color: var(--on-primary); }
 .w-btn:disabled { opacity: .7; cursor: default; }
 .w-pill { display: inline-flex; align-items: center; gap: 12px; padding: 16px 36px; border-radius: 999px; border: 1px solid var(--hairline); background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink); text-decoration: none; font-size: 15px; letter-spacing: .26em; text-transform: uppercase; cursor: pointer; transition: background .2s; }
-.w-pill:hover { background: var(--glass-strong); color: var(--soft); }
+.w-pill:hover { background: var(--glass-strong); }
 .w-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-align: start; }
-.w-input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--glass); color: var(--ink); font-size: 17px; letter-spacing: 0; text-transform: none; line-height: 1.5; }
-.w-err { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--candle); font-style: italic; }
+.w-input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--glass-border); background: color-mix(in srgb, var(--bg) 92%, transparent); color: var(--ink); font-size: 17px; letter-spacing: 0; text-transform: none; line-height: 1.5; }
+.w-err { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--primary); font-style: italic; }
 
 @keyframes sheen { 0% { transform: translateX(-160%) rotate(20deg); } 60%, 100% { transform: translateX(160%) rotate(20deg); } }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }

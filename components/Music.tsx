@@ -11,8 +11,16 @@ export default function Music({ src, autoplayOnTap, playLabel, pauseLabel, rtl }
 
   const start = useCallback(() => {
     if (userStopped.current) return;
-    if (!audio.current) { audio.current = new Audio(src); audio.current.loop = true; audio.current.volume = 0.6; }
-    audio.current.play().then(() => setPlaying(true)).catch(() => {}).finally(() => setShown(true));
+    if (!audio.current) {
+      const el = new Audio(src);
+      el.loop = true;
+      el.volume = 0.6;
+      // Keep the button in sync with playback state from any cause (tab hidden, OS media key, etc.).
+      el.onplay = () => setPlaying(true);
+      el.onpause = () => setPlaying(false);
+      audio.current = el;
+    }
+    audio.current.play().catch(() => {}).finally(() => setShown(true));
   }, [src]);
 
   // Hero fires "wedding:open" when the guest taps the card or scrolls it open.
@@ -21,7 +29,19 @@ export default function Music({ src, autoplayOnTap, playLabel, pauseLabel, rtl }
     window.addEventListener("wedding:open", start);
     return () => window.removeEventListener("wedding:open", start);
   }, [autoplayOnTap, start]);
-  useEffect(() => () => audio.current?.pause(), []);
+
+  // Never keep playing once the guest leaves the tab or closes/navigates away.
+  useEffect(() => {
+    const pause = () => audio.current?.pause();
+    const onVisibility = () => { if (document.hidden) pause(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", pause);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", pause);
+      pause();
+    };
+  }, []);
 
   const toggle = () => {
     if (playing) { userStopped.current = true; audio.current?.pause(); setPlaying(false); }

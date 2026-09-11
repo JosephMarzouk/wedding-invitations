@@ -51,9 +51,10 @@ export default function Guestbook({ weddingId, coupleLine, bg, initial, strings:
   return (
     <section style={{ position: "relative", padding: "120px 16px 140px", overflow: "hidden" }}>
       <img src={bg} alt="" aria-hidden loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, var(--bg) 0%, var(--shade) 22%, var(--shade) 100%)" }} />
+      {/* Dark fade over the photo, independent of the page's light theme, so the card below reads clearly. */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--ink) 18%, transparent) 0%, color-mix(in srgb, var(--ink) 55%, transparent) 35%, color-mix(in srgb, var(--ink) 80%, transparent) 100%)" }} />
 
-      <form onSubmit={submit} noValidate style={{ position: "relative", width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, background: "color-mix(in srgb, var(--bg) 40%, color-mix(in srgb, var(--candle) 12%, transparent))", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,.18)", borderTopColor: "rgba(255,255,255,.36)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 40px color-mix(in srgb, var(--candle) 5%, transparent), 0 30px 60px -20px rgba(0,0,0,.6)", display: "flex", flexDirection: "column", gap: 18, textAlign: "start" }}>
+      <form onSubmit={submit} noValidate style={{ position: "relative", width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, background: "var(--glass-strong)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "1px solid var(--glass-border)", boxShadow: "0 30px 60px -20px color-mix(in srgb, var(--ink) 45%, transparent)", display: "flex", flexDirection: "column", gap: 18, textAlign: "start" }}>
         <div style={{ textAlign: "center" }}>
           <h2 style={{ margin: 0, fontWeight: 400, fontSize: "clamp(30px,4vw,38px)", lineHeight: 1.15, color: "var(--ink)" }}>{s.guestbookTitle}</h2>
           <p style={{ margin: "6px 0 0", fontStyle: "italic", color: "var(--soft)" }}>{s.guestbookSub}</p>
@@ -76,7 +77,7 @@ export default function Guestbook({ weddingId, coupleLine, bg, initial, strings:
         {state === "sent" && (
           <div role="status" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginTop: 6 }}>
             <WaxSeal />
-            <span style={{ fontStyle: "italic", color: "var(--candle)" }}>{s.sent}</span>
+            <span style={{ fontStyle: "italic", color: "var(--soft)" }}>{s.sent}</span>
           </div>
         )}
       </form>
@@ -84,7 +85,7 @@ export default function Guestbook({ weddingId, coupleLine, bg, initial, strings:
       {list.length > 0 && (
         <ul style={{ position: "relative", listStyle: "none", padding: 0, width: "min(520px,100%)", margin: "40px auto 0", display: "flex", flexDirection: "column", gap: 14, textAlign: "start" }}>
           {list.map((m) => (
-            <li key={m.id} className="w-glass" style={{ borderRadius: 18, padding: "18px 22px", background: "color-mix(in srgb, var(--candle) 8%, transparent)" }}>
+            <li key={m.id} className="w-glass" style={{ borderRadius: 18, padding: "18px 22px" }}>
               <p style={{ margin: 0, color: "var(--ink)", textWrap: "pretty", whiteSpace: "pre-line" }}>{m.body}</p>
               <div style={{ marginTop: 8, fontSize: 13, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--accent)" }}>— {m.guest_name}</div>
             </li>

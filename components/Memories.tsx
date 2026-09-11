@@ -46,15 +46,17 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
     const ctx = c.getContext("2d")!;
     draw(ctx, w, h);
     await document.fonts.load(`400 ${Math.round(w * 0.09)}px "Pinyon Script"`).catch(() => {});
+    // Dark (ink #2B211B) fade, not pure black, then bright on-dark text — the stamp sits on a real
+    // photo, so it keeps the same "dark overlay behind on-image text" rule as the rest of the site.
     const g = ctx.createLinearGradient(0, h * 0.62, 0, h);
-    g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.65)");
+    g.addColorStop(0, "rgba(43,33,27,0)"); g.addColorStop(1, "rgba(43,33,27,.65)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-    ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = w * 0.01;
-    ctx.fillStyle = "#F3D9A4";
+    ctx.shadowColor = "rgba(43,33,27,.6)"; ctx.shadowBlur = w * 0.01;
+    ctx.fillStyle = "#FFFDF8";
     ctx.font = `400 ${Math.round(w * 0.09)}px "Pinyon Script", cursive`;
     ctx.fillText(coupleLine, w / 2, h - h * 0.11);
-    ctx.fillStyle = "#E4CFA4";
+    ctx.fillStyle = "#B08D57";
     ctx.font = `400 ${Math.round(w * 0.028)}px ${getComputedStyle(c).fontFamily}`;
     ctx.fillText(dateLine, w / 2, h - h * 0.055);
     setMode("shot");
@@ -92,7 +94,7 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
   const reset = () => { stop(); setMode("idle"); };
 
   return (
-    <section style={{ position: "relative", padding: "40px 16px 140px", background: "linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--primary) 14%, var(--bg)) 50%, var(--bg))" }}>
+    <section style={{ position: "relative", padding: "40px 16px 140px", background: "var(--bg)" }}>
       <div className="w-glass" style={{ width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, display: "flex", flexDirection: "column", gap: 18 }}>
         <div>
           <h2 style={{ margin: 0, fontWeight: 400, fontSize: "clamp(30px,4vw,38px)", lineHeight: 1.15, color: "var(--ink)" }}>{s.memoriesTitle}</h2>
@@ -140,9 +142,9 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
       {list.length > 0 && (
         <div style={{ width: "min(1100px,100%)", margin: "48px auto 0", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 22, padding: "0 8px" }}>
           {list.map((m, i) => (
-            <figure key={m.id} style={{ margin: 0, background: "color-mix(in srgb, var(--candle) 30%, white)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px rgba(0,0,0,.7)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
+            <figure key={m.id} style={{ margin: 0, background: "var(--bg)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px color-mix(in srgb, var(--ink) 45%, transparent)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
               <img src={assetUrl(`memories/${m.storage_path}`)} alt={m.guest_name ? `${m.guest_name}` : ""} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "3/4", objectFit: "cover" }} />
-              {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "#2a2626", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
+              {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "var(--text-muted)", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
             </figure>
           ))}
         </div>
