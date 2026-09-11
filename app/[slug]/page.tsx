@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { assetUrl, eventParts, remoteAssetUrl, t, type Memory, type Message, type Wedding } from "@/lib/wedding";
 import Hero from "@/components/Hero";
+import Invitation from "@/components/Invitation";
 import Intro from "@/components/Intro";
 import Gallery from "@/components/Gallery";
 import Countdown from "@/components/Countdown";
@@ -52,6 +53,7 @@ export default async function Page(props: Props) {
   const c = w.config;
   const s = t(c.locale);
   const rtl = c.locale === "ar";
+  const d2 = c.design === 2;
   const ev = eventParts(c.date, c.locale);
   const dateLine = `${ev.day} · ${ev.monthShort} · ${ev.year}`;
   const coupleLine = `${c.couple.a} & ${c.couple.b}`;
@@ -80,7 +82,7 @@ export default async function Page(props: Props) {
   } as CSSProperties;
 
   return (
-    <div className="wedding" dir={rtl ? "rtl" : "ltr"} lang={c.locale} style={theme}>
+    <div className="wedding" dir={rtl ? "rtl" : "ltr"} lang={c.locale} style={theme} data-design={c.design}>
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <link rel="stylesheet" href={fontsHref} precedence="fonts" />
 
@@ -90,10 +92,14 @@ export default async function Page(props: Props) {
         </div>
       )}
 
-      <Hero
-        a={c.couple.a} b={c.couple.b} dateLine={dateLine} kicker={s.kicker}
-        image={assetUrl(c.hero.image)} overlay={assetUrl(c.hero.overlay)} scrollCue={c.hero.scrollCue} rtl={rtl}
-      />
+      {d2 ? (
+        <Invitation a={c.couple.a} b={c.couple.b} image={assetUrl(c.hero.image)} hint={c.hero.scrollCue} rtl={rtl} />
+      ) : (
+        <Hero
+          a={c.couple.a} b={c.couple.b} dateLine={dateLine} kicker={s.kicker}
+          image={assetUrl(c.hero.image)} overlay={assetUrl(c.hero.overlay)} scrollCue={c.hero.scrollCue} rtl={rtl}
+        />
+      )}
       <Reveal>
         <Intro heading={c.intro.heading} body={c.intro.body} />
       </Reveal>
@@ -106,11 +112,11 @@ export default async function Page(props: Props) {
         </Countdown>
       </Reveal>
       <Reveal>
-        <Events events={c.events} locale={c.locale} city={c.city} images={c.gallery.length ? c.gallery.map(assetUrl) : [assetUrl(c.hero.image)]} strings={s} />
+        <Events events={c.events.map((e) => ({ ...e, image: e.image && assetUrl(e.image) }))} locale={c.locale} city={c.city} images={c.gallery.length ? c.gallery.map(assetUrl) : [assetUrl(c.hero.image)]} strings={s} />
       </Reveal>
       {c.features.guestbook && (
         <Reveal>
-          <Guestbook weddingId={w.id} coupleLine={coupleLine} bg={assetUrl(c.gallery.at(-1) ?? c.hero.image)} initial={(messages?.data ?? []) as Message[]} strings={s} />
+          <Guestbook weddingId={w.id} coupleLine={coupleLine} bg={assetUrl(c.guestbook?.image ?? c.gallery.at(-1) ?? c.hero.image)} initial={(messages?.data ?? []) as Message[]} strings={s} />
         </Reveal>
       )}
       {c.features.memories && (
@@ -118,9 +124,11 @@ export default async function Page(props: Props) {
           <Memories weddingId={w.id} coupleLine={coupleLine} dateLine={dateLine} initial={(memories?.data ?? []) as Memory[]} strings={s} />
         </Reveal>
       )}
-      <Reveal>
-        <ClosingNote text={s.waitingForYou} />
-      </Reveal>
+      {!d2 && (
+        <Reveal>
+          <ClosingNote text={s.waitingForYou} />
+        </Reveal>
+      )}
       {c.music?.url && <Music src={remoteAssetUrl(c.music.url)} autoplayOnTap={c.music.autoplayOnTap} playLabel={s.playMusic} pauseLabel={s.pauseMusic} rtl={rtl} />}
     </div>
   );

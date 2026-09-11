@@ -26,6 +26,17 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   /* Dark overlay for text over photos: ink at partial opacity (matches the requested
      rgba(43,33,27,.35) exactly when ink is #2B211B) — never derived from the light bg. */
   --overlay: color-mix(in srgb, var(--ink) 35%, transparent);
+  /* Roles that flip between the light and night designs: paper = the light stationery surface
+     (calendar card, photo mats), shade = the dark tint behind shadows and photo overlays. */
+  --paper: var(--bg);
+  --paper-ink: var(--ink);
+  --shade: var(--ink);
+  --seal: var(--primary);
+  --glow: color-mix(in srgb, var(--accent) 10%, transparent);
+  --err: var(--primary);
+  --field: color-mix(in srgb, var(--bg) 92%, transparent);
+  --glass-top: var(--glass-border);
+  --glass-glow: 0 0 #0000;
 
   --font-body: var(--font-latin), Georgia, serif;
   --font-script: "Pinyon Script", var(--font-latin), cursive;
@@ -39,6 +50,33 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
   min-height: 100dvh;
 }
 .wedding[dir="rtl"] { --font-body: var(--font-arabic), var(--font-latin), serif; }
+
+/* Design 2 — a candlelit night. Theme colors still come from the wedding row (bg = night,
+   ink = paper, primary = velvet, accent = gold); this layer fixes the roles that differ from the
+   light design: paper is the ink color, shadows are black, glass is a warm translucent film. */
+.wedding[data-design="2"] {
+  --bg-secondary: #241013;
+  --text-secondary: #D8C0AA;
+  --text-muted: #A99589;
+  --text-on-dark: var(--ink);
+  --candle: #F3D9A4;
+  --paper: var(--ink);
+  --paper-ink: var(--bg);
+  --shade: #100608;
+  --seal: #A8182B;
+  --glow: rgba(168, 24, 43, .28);
+  --err: var(--candle);
+  --field: rgba(255, 240, 225, .12);
+  --glass: rgba(255, 240, 225, .10);
+  --glass-strong: rgba(255, 240, 225, .10);
+  --glass-border: rgba(255, 255, 255, .18);
+  --glass-top: rgba(255, 255, 255, .36);
+  --glass-glow: inset 0 1px 0 rgba(255, 255, 255, .12), inset 0 0 40px rgba(255, 240, 225, .05);
+  --hairline: rgba(200, 163, 95, .45);
+  --overlay: rgba(26, 10, 12, .65);
+}
+/* No white flash on overscroll around a night page. */
+html:has(.wedding[data-design="2"]) { background: #1A0A0C; }
 .wedding a { color: var(--accent); }
 .wedding a:hover { color: var(--ink); }
 .wedding button, .wedding input, .wedding textarea { font-family: inherit; }
@@ -64,8 +102,8 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 .w-pill { display: inline-flex; align-items: center; gap: 12px; padding: 16px 36px; border-radius: 999px; border: 1px solid var(--hairline); background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink); text-decoration: none; font-size: 15px; letter-spacing: .26em; text-transform: uppercase; cursor: pointer; transition: background .2s; }
 .w-pill:hover { background: var(--glass-strong); }
 .w-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); text-align: start; }
-.w-input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--glass-border); background: color-mix(in srgb, var(--bg) 92%, transparent); color: var(--ink); font-size: 17px; letter-spacing: 0; text-transform: none; line-height: 1.5; }
-.w-err { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--primary); font-style: italic; }
+.w-input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--field); color: var(--ink); font-size: 17px; letter-spacing: 0; text-transform: none; line-height: 1.5; }
+.w-err { font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--err); font-style: italic; }
 
 @keyframes sheen { 0% { transform: translateX(-160%) rotate(20deg); } 60%, 100% { transform: translateX(160%) rotate(20deg); } }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
@@ -73,6 +111,8 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
 @keyframes stamp { 0% { transform: scale(1.8) rotate(-12deg); opacity: 0; } 60% { transform: scale(.95) rotate(0); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes ring { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes sway { 0%, 100% { rotate: -1.5deg; } 50% { rotate: 1.5deg; } }
+@keyframes glow { 0%, 100% { opacity: .55; } 50% { opacity: .85; } }
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

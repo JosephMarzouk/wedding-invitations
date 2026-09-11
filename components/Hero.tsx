@@ -1,81 +1,15 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useOpening } from "./useOpening";
+import { CornerVines, Ornaments } from "./ornaments";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
-const VINE =
-  "M0 0 C 50 40, 110 40, 140 100 S 190 190, 250 230 M140 100 C 120 130, 90 140, 60 150 M140 100 C 170 90, 200 60, 240 60 M190 160 C 200 130, 230 120, 260 118 M0 0 C 20 60, 30 110, 20 160 M250 230 C 270 250, 280 275, 282 296";
-const LEAVES = [
-  "M40 28 q14 -12 26 2 q-14 12 -26 -2z", "M92 46 q14 -12 26 2 q-14 12 -26 -2z", "M118 82 q-6 -18 12 -22 q6 18 -12 22z",
-  "M98 138 q14 -12 26 2 q-14 12 -26 -2z", "M70 150 q-16 8 -22 -6 q16 -8 22 6z", "M176 84 q14 -12 26 2 q-14 12 -26 -2z",
-  "M212 62 q-6 -18 12 -22 q6 18 -12 22z", "M168 166 q14 -14 26 -2 q-14 12 -26 2z", "M226 128 q14 -12 26 2 q-14 12 -26 -2z",
-  "M20 90 q-18 4 -16 -14 q18 -4 16 14z", "M30 140 q18 4 10 20 q-18 -4 -10 -20z", "M210 210 q14 -12 26 2 q-14 12 -26 -2z",
-  "M262 258 q-18 4 -16 -14 q18 -4 16 14z",
-];
-const ROSE = "M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22";
 const ROSE_SM = "M0 0 c 3 -4 9 -3 8 2 c -1 5 -8 5 -9 -1 c -1 -7 10 -9 13 -2 c 3 7 -5 13 -12 9 c -7 -4 -5 -14 2 -17 c 8 -3 16 5 13 13";
-
-const vineBox: React.CSSProperties = { position: "absolute", width: "min(44vw,360px)", height: "min(44vw,360px)" };
 
 type Props = { a: string; b: string; dateLine: string; kicker: string; image: string; overlay: string; scrollCue: string; rtl: boolean };
 
 export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue, rtl }: Props) {
-  const ref = useRef<HTMLElement>(null);
-  const [p, setP] = useState(0);
-  const announced = useRef(false);
-
-  const announceOpen = () => {
-    if (announced.current) return;
-    announced.current = true;
-    window.dispatchEvent(new Event("wedding:open"));
-  };
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const max = el.offsetHeight - window.innerHeight;
-      const np = clamp(max > 0 ? (window.scrollY - el.offsetTop) / max : 1, 0, 1);
-      setP(np);
-      if (np > 0.4) announceOpen();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    onScroll();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
-  // Custom-duration smooth scroll (rather than the browser's native "smooth", whose speed can't be
-  // set) so the tap-to-open pace is deliberately controllable — 1300ms, ~500ms slower than a typical
-  // default smooth scroll of this distance.
-  const OPEN_DURATION_MS = 1300;
-  const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
-
-  const openCard = () => {
-    const el = ref.current;
-    if (!el) return;
-    announced.current = false;
-    announceOpen();
-    const target = el.offsetTop + el.offsetHeight - window.innerHeight;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      window.scrollTo(0, target);
-      return;
-    }
-    const startY = window.scrollY;
-    const diff = target - startY;
-    const startTime = performance.now();
-    const step = (now: number) => {
-      const t = Math.min(1, (now - startTime) / OPEN_DURATION_MS);
-      // behavior: "instant" — the page sets CSS scroll-behavior: smooth globally, which would
-      // otherwise turn every one of these per-frame calls into its own competing native scroll.
-      window.scrollTo({ top: startY + diff * easeInOutCubic(t), behavior: "instant" });
-      if (t < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
+  const { ref, p, openCard } = useOpening();
 
   const open = clamp(p / 0.85, 0, 1);
   const dir = rtl ? -1 : 1;
@@ -96,31 +30,11 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
           <img src={image} alt="" aria-hidden style={{ position: "absolute", inset: "-6%", width: "112%", height: "112%", objectFit: "cover", filter: "blur(18px) saturate(.9)", transform: `scale(${(1.1 - 0.1 * p).toFixed(3)})`, transformOrigin: "center", willChange: "transform" }} />
           {/* Always a dark fade here, regardless of the page's light theme — the names sitting on
               this photo need that contrast, per "add a dark overlay behind text over images". */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--ink) 55%, transparent) 0%, color-mix(in srgb, var(--ink) 42%, transparent) 45%, color-mix(in srgb, var(--ink) 82%, transparent) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--shade) 55%, transparent) 0%, color-mix(in srgb, var(--shade) 42%, transparent) 45%, color-mix(in srgb, var(--shade) 82%, transparent) 100%)" }} />
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--primary) 35%, transparent), transparent 18%), radial-gradient(circle at 84% 72%, color-mix(in srgb, var(--primary) 30%, transparent), transparent 16%), radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 12%)" }} />
 
-          <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
-            <defs>
-              <symbol id="vine" viewBox="0 0 300 300">
-                <g fill="none" stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={VINE} />
-                  <g fill="var(--accent)" fillOpacity=".3">{LEAVES.map((d) => <path key={d} d={d} />)}</g>
-                  <g strokeWidth="1.2">
-                    <path transform="translate(150 105)" d={ROSE} />
-                    <path transform="translate(250 230) scale(.75)" d={ROSE} />
-                    <path transform="translate(60 152) scale(.6)" d={ROSE} />
-                    <path transform="translate(260 118) scale(.55)" d={ROSE} />
-                  </g>
-                </g>
-              </symbol>
-            </defs>
-          </svg>
-          <div aria-hidden style={{ position: "absolute", inset: 0, opacity: ornament, transition: "opacity .4s", pointerEvents: "none", filter: "drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 35%, transparent))" }}>
-            <svg style={{ ...vineBox, left: "-2%", top: "-2%" }}><use href="#vine" /></svg>
-            <svg style={{ ...vineBox, right: "-2%", top: "-2%", transform: "scaleX(-1)" }}><use href="#vine" /></svg>
-            <svg style={{ ...vineBox, left: "-2%", bottom: "-2%", transform: "scaleY(-1)" }}><use href="#vine" /></svg>
-            <svg style={{ ...vineBox, right: "-2%", bottom: "-2%", transform: "rotate(180deg)" }}><use href="#vine" /></svg>
-          </div>
+          <Ornaments />
+          <CornerVines opacity={ornament} />
 
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
             <div className="w-kicker" style={{ marginBottom: "clamp(8px,2vh,22px)", opacity: ornament, transition: "opacity .4s" }}>{kicker}</div>
@@ -129,7 +43,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
               <div style={{ fontStyle: "italic", fontSize: "clamp(28px,4vw,44px)", color: "var(--accent)", lineHeight: 1, margin: "4px 0 8px" }}>&amp;</div>
               <div style={nameStyle}>{b}</div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: "clamp(10px,2.5vh,28px)", color: "var(--accent)", textShadow: "0 1px 3px color-mix(in srgb, var(--ink) 60%, transparent)", fontSize: "clamp(14px,1.8vw,18px)", letterSpacing: ".3em", fontVariantNumeric: "oldstyle-nums", opacity: ornament, transition: "opacity .4s" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: "clamp(10px,2.5vh,28px)", color: "var(--accent)", textShadow: "0 1px 3px color-mix(in srgb, var(--shade) 60%, transparent)", fontSize: "clamp(14px,1.8vw,18px)", letterSpacing: ".3em", fontVariantNumeric: "oldstyle-nums", opacity: ornament, transition: "opacity .4s" }}>
               <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="var(--accent)" strokeWidth="1.2" strokeLinecap="round"><path transform="translate(9 12)" d={ROSE_SM} /></svg>
               <span>{dateLine}</span>
               <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="var(--accent)" strokeWidth="1.2" strokeLinecap="round" style={{ transform: "scaleX(-1)" }}><path transform="translate(9 12)" d={ROSE_SM} /></svg>
@@ -167,7 +81,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
               </div>
             </div>
           </div>
-          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "8%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink) 25%, transparent) 50%, transparent)", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: 0, bottom: 0, [start]: "58%", width: "8%", transform: `translateX(${-dir * 50}%)`, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--shade) 25%, transparent) 50%, transparent)", opacity: 1 - clamp(p / 0.2, 0, 1), pointerEvents: "none" }} />
         </button>
 
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 28, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, color: "var(--accent)", fontStyle: "italic", fontSize: 15, letterSpacing: ".04em", opacity: 1 - clamp(p / 0.15, 0, 1), pointerEvents: "none" }}>

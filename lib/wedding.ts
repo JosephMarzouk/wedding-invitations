@@ -1,4 +1,6 @@
 export type WeddingConfig = {
+  /** Page design: 1 (default) = light stationery with full-screen doors, 2 = candlelit night with a sealed card. */
+  design?: number;
   couple: { a: string; b: string };
   date: string; // ISO with offset
   city: string;
@@ -6,7 +8,8 @@ export type WeddingConfig = {
   hero: { image: string; overlay: string; scrollCue: string };
   intro: { heading: string; body: string };
   gallery: string[];
-  events: { title: string; titleAr?: string; type: string; start: string; end: string; mapsUrl: string }[];
+  events: { title: string; titleAr?: string; type: string; start: string; end: string; mapsUrl: string; image?: string }[];
+  guestbook?: { image?: string };
   theme: { primary: string; accent: string; bg: string; ink: string; fontLatin: string; fontArabic: string };
   music: { url: string; autoplayOnTap: boolean };
   features: { guestbook: boolean; memories: boolean; rsvp: boolean };

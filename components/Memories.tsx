@@ -153,7 +153,7 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
           <div style={{ width: "min(560px,100%)", margin: "48px auto 0", padding: "0 8px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 22 }}>
               {shown.map((m, i) => (
-                <figure key={m.id} style={{ margin: 0, background: "var(--bg)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px color-mix(in srgb, var(--ink) 45%, transparent)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
+                <figure key={m.id} style={{ margin: 0, background: "var(--paper)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px color-mix(in srgb, var(--shade) 45%, transparent)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
                   {/* remoteAssetUrl, not assetUrl — an uploaded photo's path has no local dev placeholder to fall back to. */}
                   <img src={remoteAssetUrl(`memories/${m.storage_path}`)} alt={m.guest_name ? `${m.guest_name}` : ""} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "3/4", objectFit: "cover" }} />
                   {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "var(--text-muted)", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
