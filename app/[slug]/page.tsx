@@ -13,6 +13,7 @@ import Events from "@/components/Events";
 import Guestbook from "@/components/Guestbook";
 import Memories from "@/components/Memories";
 import Music from "@/components/Music";
+import Reveal from "@/components/Reveal";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -92,17 +93,29 @@ export default async function Page(props: Props) {
         a={c.couple.a} b={c.couple.b} dateLine={dateLine} kicker={s.kicker}
         image={assetUrl(c.hero.image)} overlay={assetUrl(c.hero.overlay)} scrollCue={c.hero.scrollCue} rtl={rtl}
       />
-      <Intro heading={c.intro.heading} body={c.intro.body} />
-      <Gallery photos={c.gallery.map(assetUrl)} alt={coupleLine} />
-      <Countdown iso={c.date} locale={c.locale} strings={s}>
-        <SaveTheDate iso={c.date} title={`${coupleLine} — ${s.wedding}`} location={c.city} label={s.saveTheDate} />
-      </Countdown>
-      <Events events={c.events} locale={c.locale} city={c.city} images={c.gallery.length ? c.gallery.map(assetUrl) : [assetUrl(c.hero.image)]} strings={s} />
+      <Reveal>
+        <Intro heading={c.intro.heading} body={c.intro.body} />
+      </Reveal>
+      <Reveal>
+        <Gallery photos={c.gallery.map(assetUrl)} alt={coupleLine} />
+      </Reveal>
+      <Reveal>
+        <Countdown iso={c.date} locale={c.locale} strings={s}>
+          <SaveTheDate iso={c.date} title={`${coupleLine} — ${s.wedding}`} location={c.city} label={s.saveTheDate} />
+        </Countdown>
+      </Reveal>
+      <Reveal>
+        <Events events={c.events} locale={c.locale} city={c.city} images={c.gallery.length ? c.gallery.map(assetUrl) : [assetUrl(c.hero.image)]} strings={s} />
+      </Reveal>
       {c.features.guestbook && (
-        <Guestbook weddingId={w.id} coupleLine={coupleLine} bg={assetUrl(c.gallery.at(-1) ?? c.hero.image)} initial={(messages?.data ?? []) as Message[]} strings={s} />
+        <Reveal>
+          <Guestbook weddingId={w.id} coupleLine={coupleLine} bg={assetUrl(c.gallery.at(-1) ?? c.hero.image)} initial={(messages?.data ?? []) as Message[]} strings={s} />
+        </Reveal>
       )}
       {c.features.memories && (
-        <Memories weddingId={w.id} coupleLine={coupleLine} dateLine={dateLine} initial={(memories?.data ?? []) as Memory[]} strings={s} />
+        <Reveal>
+          <Memories weddingId={w.id} coupleLine={coupleLine} dateLine={dateLine} initial={(memories?.data ?? []) as Memory[]} strings={s} />
+        </Reveal>
       )}
       {c.music?.url && <Music src={remoteAssetUrl(c.music.url)} autoplayOnTap={c.music.autoplayOnTap} playLabel={s.playMusic} pauseLabel={s.pauseMusic} rtl={rtl} />}
     </div>
