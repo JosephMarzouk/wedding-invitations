@@ -1,0 +1,152 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { assetUrl, type Memory, type Strings } from "@/lib/wedding";
+import { Spinner, WaxSeal } from "./Guestbook";
+
+const MAX_SIDE = 1600;
+
+async function fetchMemories(weddingId: string) {
+  const { data } = await supabase.from("memories").select("id,storage_path,guest_name,created_at").eq("wedding_id", weddingId).eq("approved", true).order("created_at", { ascending: false }).limit(60);
+  return (data ?? []) as Memory[];
+}
+
+type Props = { weddingId: string; coupleLine: string; dateLine: string; initial: Memory[]; strings: Strings };
+
+export default function Memories({ weddingId, coupleLine, dateLine, initial, strings: s }: Props) {
+  const video = useRef<HTMLVideoElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const stream = useRef<MediaStream | null>(null);
+  const [mode, setMode] = useState<"idle" | "live" | "shot" | "sending" | "done">("idle");
+  const [camera, setCamera] = useState(true); // false -> fall back to <input capture>
+  const [name, setName] = useState("");
+  const [err, setErr] = useState("");
+  const [list, setList] = useState(initial);
+
+  const stop = () => { stream.current?.getTracks().forEach((t) => t.stop()); stream.current = null; };
+  useEffect(() => stop, []);
+
+  const openCamera = async () => {
+    setErr("");
+    try {
+      const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 1280 } }, audio: false });
+      stream.current = st;
+      setMode("live");
+      requestAnimationFrame(() => { if (video.current) { video.current.srcObject = st; video.current.play().catch(() => {}); } });
+    } catch {
+      setCamera(false);
+    }
+  };
+
+  const stamp = async (draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void, sw: number, sh: number) => {
+    const k = Math.min(1, MAX_SIDE / Math.max(sw, sh));
+    const w = Math.round(sw * k), h = Math.round(sh * k);
+    const c = canvas.current!;
+    c.width = w; c.height = h;
+    const ctx = c.getContext("2d")!;
+    draw(ctx, w, h);
+    await document.fonts.load(`400 ${Math.round(w * 0.09)}px "Pinyon Script"`).catch(() => {});
+    const g = ctx.createLinearGradient(0, h * 0.62, 0, h);
+    g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.65)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = w * 0.01;
+    ctx.fillStyle = "#F3D9A4";
+    ctx.font = `400 ${Math.round(w * 0.09)}px "Pinyon Script", cursive`;
+    ctx.fillText(coupleLine, w / 2, h - h * 0.11);
+    ctx.fillStyle = "#E4CFA4";
+    ctx.font = `400 ${Math.round(w * 0.028)}px ${getComputedStyle(c).fontFamily}`;
+    ctx.fillText(dateLine, w / 2, h - h * 0.055);
+    setMode("shot");
+  };
+
+  const takePhoto = () => {
+    const v = video.current;
+    if (!v || !v.videoWidth) return;
+    stamp((ctx, w, h) => ctx.drawImage(v, 0, 0, w, h), v.videoWidth, v.videoHeight).then(stop);
+  };
+
+  const onFile = async (f: File | undefined) => {
+    if (!f) return;
+    setErr("");
+    const bmp = await createImageBitmap(f).catch(() => null);
+    if (!bmp) { setErr("Could not read that image."); return; }
+    await stamp((ctx, w, h) => ctx.drawImage(bmp, 0, 0, w, h), bmp.width, bmp.height);
+    bmp.close();
+  };
+
+  const send = async () => {
+    const c = canvas.current!;
+    setMode("sending"); setErr("");
+    const blob = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", 0.86));
+    if (!blob) { setErr("Could not encode the photo."); setMode("shot"); return; }
+    const path = `${weddingId}/${crypto.randomUUID()}.jpg`;
+    const up = await supabase.storage.from("memories").upload(path, blob, { contentType: "image/jpeg" });
+    if (up.error) { setErr(up.error.message); setMode("shot"); return; }
+    const { error } = await supabase.rpc("post_memory", { p_wedding_id: weddingId, p_storage_path: path, p_guest_name: name.trim() || null });
+    if (error) { setErr(error.message); setMode("shot"); return; }
+    setList(await fetchMemories(weddingId));
+    setMode("done");
+  };
+
+  const reset = () => { stop(); setMode("idle"); };
+
+  return (
+    <section style={{ position: "relative", padding: "40px 16px 140px", background: "linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--primary) 14%, var(--bg)) 50%, var(--bg))" }}>
+      <div className="w-glass" style={{ width: "min(520px,100%)", margin: "0 auto", padding: "40px 30px 34px", borderRadius: 24, display: "flex", flexDirection: "column", gap: 18 }}>
+        <div>
+          <h2 style={{ margin: 0, fontWeight: 400, fontSize: "clamp(30px,4vw,38px)", lineHeight: 1.15, color: "var(--ink)" }}>{s.memoriesTitle}</h2>
+          <p style={{ margin: "6px 0 0", fontStyle: "italic", color: "var(--soft)" }}>{s.memoriesSub}</p>
+        </div>
+
+        <div style={{ position: "relative", borderRadius: 18, overflow: "hidden", background: "#000", aspectRatio: "3/4", display: mode === "idle" || mode === "done" ? "none" : "block" }}>
+          <video ref={video} playsInline muted style={{ width: "100%", height: "100%", objectFit: "cover", display: mode === "live" ? "block" : "none" }} />
+          <canvas ref={canvas} style={{ width: "100%", height: "100%", objectFit: "contain", display: mode === "live" ? "none" : "block" }} />
+        </div>
+
+        {(mode === "shot" || mode === "sending") && (
+          <label className="w-field">{s.nameOptional}
+            <input className="w-input" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={s.nameOptional} autoComplete="name" maxLength={80} />
+          </label>
+        )}
+        {err && <span role="alert" className="w-err">{err}</span>}
+
+        {mode === "idle" && camera && <button type="button" className="w-btn" onClick={openCamera}>{s.openCamera}</button>}
+        {mode === "idle" && !camera && (
+          <label className="w-btn" style={{ cursor: "pointer" }}>
+            {s.cameraFallback}
+            <input type="file" accept="image/*" capture="environment" onChange={(e) => onFile(e.target.files?.[0])} style={{ position: "absolute", width: 1, height: 1, opacity: 0 }} />
+          </label>
+        )}
+        {mode === "live" && <button type="button" className="w-btn" onClick={takePhoto}>{s.takePhoto}</button>}
+        {(mode === "shot" || mode === "sending") && (
+          <div style={{ display: "flex", gap: 12 }}>
+            <button type="button" className="w-pill" onClick={reset} disabled={mode === "sending"} style={{ flex: 1, justifyContent: "center", padding: "16px 20px" }}>{s.retake}</button>
+            <button type="button" className="w-btn" onClick={send} disabled={mode === "sending"} style={{ flex: 1.4 }}>
+              {mode === "sending" && <Spinner />}
+              {mode === "sending" ? s.uploading : s.upload}
+            </button>
+          </div>
+        )}
+        {mode === "done" && (
+          <div role="status" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            <WaxSeal />
+            <span style={{ fontStyle: "italic", color: "var(--candle)" }}>{s.uploaded}</span>
+            <button type="button" className="w-pill" onClick={reset} style={{ marginTop: 8 }}>{s.openCamera}</button>
+          </div>
+        )}
+      </div>
+
+      {list.length > 0 && (
+        <div style={{ width: "min(1100px,100%)", margin: "48px auto 0", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 22, padding: "0 8px" }}>
+          {list.map((m, i) => (
+            <figure key={m.id} style={{ margin: 0, background: "color-mix(in srgb, var(--candle) 30%, white)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px rgba(0,0,0,.7)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
+              <img src={assetUrl(`memories/${m.storage_path}`)} alt={m.guest_name ? `${m.guest_name}` : ""} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "3/4", objectFit: "cover" }} />
+              {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "#2a2626", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Bodoni+Moda:opsz,ital,wght@6..96,0,400;6..96,0,500;6..96,0,600;6..96,1,400&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth;background:#1A0A0C}
+body{margin:0;background:#1A0A0C;color:#F7E4CC;font-family:"Bodoni Moda",Georgia,serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#C8A35F}a:hover{color:#F3D9A4}
+button,input,textarea{font-family:inherit}
+input::placeholder,textarea::placeholder{color:rgba(247,228,204,.6)}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #C8A35F;outline-offset:3px}
+input:focus,textarea:focus{outline:2px solid #C8A35F;outline-offset:0}
+@keyframes sheen{0%{transform:translateX(-160%) rotate(20deg)}60%{transform:translateX(160%) rotate(20deg)}100%{transform:translateX(160%) rotate(20deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes stamp{0%{transform:scale(1.8) rotate(-12deg);opacity:0}60%{transform:scale(.95) rotate(0);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes sway{0%,100%{rotate:-1.5deg}50%{rotate:1.5deg}}
+@keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:.85}}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+</style>
+</helmet>
+
+<main style="background:#1A0A0C;color:#F7E4CC;text-align:center;overflow-x:clip">
+
+<!-- 1 + 2: sealed invitation opening onto the names -->
+<section data-screen-label="Invitation" ref="{{ heroRef }}" style="position:relative;height:200vh">
+  <div style="position:sticky;top:0;height:100vh;overflow:hidden">
+    <!-- Names scene behind the doors -->
+    <div style="position:absolute;inset:0;background:#1A0A0C">
+      <img src="images/hall.jpg" alt="" aria-hidden="true" style="position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;filter:blur(18px) saturate(.9);transform:scale({{ bgScale }});transform-origin:center;will-change:transform">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,12,.72) 0%,rgba(60,14,20,.55) 45%,rgba(26,10,12,.9) 100%)"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 18% 22%,rgba(168,24,43,.35),transparent 18%),radial-gradient(circle at 84% 72%,rgba(168,24,43,.3),transparent 16%),radial-gradient(circle at 70% 18%,rgba(247,228,204,.14),transparent 12%),radial-gradient(circle at 24% 80%,rgba(247,228,204,.1),transparent 14%)"></div>
+      <!-- gold floral ornaments -->
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="vine" viewBox="0 0 300 300"><g fill="none" stroke="#C8A35F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0 C 50 40, 110 40, 140 100 S 190 190, 250 230 M140 100 C 120 130, 90 140, 60 150 M140 100 C 170 90, 200 60, 240 60 M190 160 C 200 130, 230 120, 260 118 M0 0 C 20 60, 30 110, 20 160 M250 230 C 270 250, 280 275, 282 296"></path><g fill="#C8A35F" fill-opacity=".3"><path d="M40 28 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M92 46 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M118 82 q-6 -18 12 -22 q6 18 -12 22z"></path><path d="M98 138 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M70 150 q-16 8 -22 -6 q16 -8 22 6z"></path><path d="M176 84 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M212 62 q-6 -18 12 -22 q6 18 -12 22z"></path><path d="M168 166 q14 -14 26 -2 q-14 12 -26 2z"></path><path d="M226 128 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M20 90 q-18 4 -16 -14 q18 -4 16 14z"></path><path d="M30 140 q18 4 10 20 q-18 -4 -10 -20z"></path><path d="M210 210 q14 -12 26 2 q-14 12 -26 -2z"></path><path d="M262 258 q-18 4 -16 -14 q18 -4 16 14z"></path></g><g stroke-width="1.2"><path transform="translate(150 105)" d="M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22"></path><path transform="translate(250 230) scale(.75)" d="M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22"></path><path transform="translate(60 152) scale(.6)" d="M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22"></path><path transform="translate(260 118) scale(.55)" d="M0 0 c 5 -7 15 -5 13 4 c -2 8 -14 8 -15 -2 c -1 -12 16 -15 21 -3 c 5 12 -9 22 -20 15 c -11 -7 -8 -24 4 -28 c 14 -5 26 8 22 22"></path></g></g></symbol></defs></svg>
+      <div aria-hidden="true" style="position:absolute;inset:0;opacity:{{ ornamentOpacity }};transition:opacity .4s;pointer-events:none;filter:drop-shadow(0 0 6px rgba(200,163,95,.35))">
+        <svg style="position:absolute;left:-2%;top:-2%;width:min(44vw,360px);height:min(44vw,360px)"><use href="#vine"></use></svg>
+        <svg style="position:absolute;right:-2%;top:-2%;width:min(44vw,360px);height:min(44vw,360px);transform:scaleX(-1)"><use href="#vine"></use></svg>
+        <svg style="position:absolute;left:-2%;bottom:-2%;width:min(44vw,360px);height:min(44vw,360px);transform:scaleY(-1)"><use href="#vine"></use></svg>
+        <svg style="position:absolute;right:-2%;bottom:-2%;width:min(44vw,360px);height:min(44vw,360px);transform:rotate(180deg)"><use href="#vine"></use></svg>
+      </div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:0 24px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:clamp(8px,2vh,22px);color:#C8A35F;font-size:12px;letter-spacing:.34em;text-transform:uppercase;opacity:{{ ornamentOpacity }};transition:opacity .4s"><span style="width:clamp(30px,8vw,90px);height:1px;background:linear-gradient(90deg,transparent,#C8A35F)"></span>Together with their families<span style="width:clamp(30px,8vw,90px);height:1px;background:linear-gradient(90deg,#C8A35F,transparent)"></span></div>
+        <div style="clip-path:inset(0 {{ namesClip }}% 0 0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0">
+          <div style="font-family:'Pinyon Script',cursive;font-size:clamp(56px,12vw,128px);line-height:1.1;color:#F3D9A4;text-shadow:0 0 24px rgba(243,217,164,.45),0 0 60px rgba(168,24,43,.35);padding:0 .25em">{{ groomName }}</div>
+          <div style="font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(28px,4vw,44px);color:#C8A35F;line-height:1;margin:4px 0 8px">&amp;</div>
+          <div style="font-family:'Pinyon Script',cursive;font-size:clamp(56px,12vw,128px);line-height:1.1;color:#F3D9A4;text-shadow:0 0 24px rgba(243,217,164,.45),0 0 60px rgba(168,24,43,.35);padding:0 .25em">{{ brideName }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:18px;margin-top:clamp(10px,2.5vh,28px);color:#E4CFA4;font-size:clamp(14px,1.8vw,18px);letter-spacing:.3em;font-variant-numeric:oldstyle-nums;opacity:{{ ornamentOpacity }};transition:opacity .4s">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#C8A35F" stroke-width="1.2" stroke-linecap="round"><path transform="translate(9 12)" d="M0 0 c 3 -4 9 -3 8 2 c -1 5 -8 5 -9 -1 c -1 -7 10 -9 13 -2 c 3 7 -5 13 -12 9 c -7 -4 -5 -14 2 -17 c 8 -3 16 5 13 13"></path></svg>
+          <span>{{ dateLine }}</span>
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#C8A35F" stroke-width="1.2" stroke-linecap="round" style="transform:scaleX(-1)"><path transform="translate(9 12)" d="M0 0 c 3 -4 9 -3 8 2 c -1 5 -8 5 -9 -1 c -1 -7 10 -9 13 -2 c 3 7 -5 13 -12 9 c -7 -4 -5 -14 2 -17 c 8 -3 16 5 13 13"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-screen doors -->
+    <button type="button" aria-label="Open invitation" onClick="{{ openCard }}" style="position:absolute;inset:0;display:block;border:0;padding:0;margin:0;background:transparent;cursor:pointer;perspective:1600px;transform-style:preserve-3d;opacity:{{ cardOpacity }};pointer-events:{{ cardEvents }}">
+      <!-- right panel -->
+      <div style="position:absolute;top:0;right:0;bottom:0;width:42%;background:linear-gradient(90deg,#3E0A10 0%,#5A0F19 18%,#5E1019 100%);transform-origin:right center;transform:rotateY({{ rightRot }}deg);backface-visibility:hidden;box-shadow:inset 40px 0 60px -30px rgba(0,0,0,.75)">
+        <div style="position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-6px;background:linear-gradient(90deg,#8A6A28,#D6B872 40%,#C8A35F);transform:rotate(-1.2deg);transform-origin:left center"></div>
+        <div style="position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:6px;background:linear-gradient(90deg,#8A6A28,#C8A35F 50%,#D6B872);transform:rotate(1.4deg);transform-origin:left center"></div>
+      </div>
+      <!-- left panel -->
+      <div style="position:absolute;top:0;left:0;bottom:0;width:58%;background:linear-gradient(90deg,#5E1019 0%,#5A0F19 80%,#4A0C14 100%);transform-origin:left center;transform:rotateY({{ leftRot }}deg);backface-visibility:hidden;box-shadow:24px 0 50px -10px rgba(0,0,0,.7)">
+        <!-- gold string -->
+        <div style="position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-6px;background:linear-gradient(90deg,#C8A35F,#D6B872 60%,#8A6A28);transform:rotate(1.2deg);transform-origin:right center"></div>
+        <div style="position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:6px;background:linear-gradient(90deg,#D6B872,#C8A35F 50%,#8A6A28);transform:rotate(-1.4deg);transform-origin:right center"></div>
+        <!-- line-art bouquet -->
+        <svg viewBox="0 0 200 320" style="position:absolute;left:50%;top:50%;width:min(44vw,260px);height:auto;transform:translate(-56%,-58%)" fill="none" stroke="#D6B872" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M100 300 C 96 250, 92 200, 96 150 M100 300 C 106 250, 112 200, 118 160 M100 300 C 94 260, 80 220, 70 190 M100 300 C 110 270, 130 240, 140 200"></path>
+          <path d="M96 150 C 80 140, 76 120, 84 106 C 92 92, 108 96, 110 110 C 112 124, 100 134, 90 128 C 82 122, 86 108, 96 112 M84 106 C 74 96, 78 78, 92 74 C 104 70, 116 82, 112 96"></path>
+          <path d="M118 160 C 110 150, 112 134, 124 130 C 136 126, 146 138, 140 150 C 134 162, 118 160, 118 148 M124 130 C 122 118, 132 108, 144 112 C 154 116, 156 130, 148 138"></path>
+          <path d="M70 190 C 60 184, 60 172, 68 168 C 76 164, 84 172, 80 180 C 76 188, 66 186, 66 178"></path>
+          <path d="M140 200 C 136 190, 142 180, 152 182 C 160 184, 162 196, 154 200 C 146 204, 138 198, 140 190"></path>
+          <g fill="#D6B872" fill-opacity=".18"><path d="M92 220 q-22 -6 -26 -28 q22 6 26 28z"></path><path d="M108 240 q22 -8 30 -30 q-22 8 -30 30z"></path><path d="M88 262 q-20 -2 -30 -18 q20 2 30 18z"></path><path d="M112 200 q24 -4 34 -22 q-24 4 -34 22z"></path><path d="M84 176 q-16 -14 -14 -30 q16 14 14 30z"></path><path d="M124 176 q10 -18 28 -22 q-10 18 -28 22z"></path><path d="M100 96 q-6 -18 4 -30 q6 18 -4 30z"></path><path d="M148 152 q14 -8 26 0 q-14 8 -26 0z"></path></g>
+          <path d="M60 236 c -14 -6 -22 -22 -16 -36 M140 236 c 14 -6 22 -22 16 -36"></path>
+        </svg>
+        <!-- gold wax seal (uploaded clip) -->
+        <div style="position:absolute;left:50%;top:50%;width:clamp(120px,28vw,190px);aspect-ratio:1;transform:translate(-56%,-30%)">
+          <img src="images/seal.png" alt="" aria-hidden="true" style="display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 5px 8px rgba(0,0,0,.55))">
+          <div style="position:absolute;inset:6%;border-radius:50%;overflow:hidden;pointer-events:none;mix-blend-mode:soft-light"><div style="position:absolute;top:-20%;left:0;width:45%;height:140%;background:linear-gradient(90deg,rgba(255,245,220,0),rgba(255,245,220,.9),rgba(255,245,220,0));animation:sheen 4.5s ease-in-out infinite"></div></div>
+        </div>
+      </div>
+      <!-- seam shadow -->
+      <div style="position:absolute;top:0;bottom:0;left:58%;width:14%;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.55) 50%,rgba(0,0,0,0));opacity:{{ seamOpacity }};pointer-events:none"></div>
+    </button>
+    <div style="position:absolute;left:0;right:0;bottom:28px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#D6B872;font-style:italic;font-size:15px;letter-spacing:.04em;opacity:{{ hintOpacity }};pointer-events:none">
+      <span>{{ openHint }}</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="animation:bob 1.8s ease-in-out infinite"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+  </div>
+</section>
+
+<!-- 3: floating photo cards -->
+<section data-screen-label="Photos" style="position:relative;padding:96px 16px 80px;background:radial-gradient(ellipse 60% 40% at 20% 30%,rgba(168,24,43,.28),transparent 70%),radial-gradient(ellipse 50% 35% at 80% 60%,rgba(247,228,204,.12),transparent 70%),radial-gradient(ellipse 40% 30% at 60% 15%,rgba(110,13,26,.35),transparent 70%),linear-gradient(180deg,#1A0A0C 0%,#22090D 50%,#1A0A0C 100%)">
+  <p style="max-width:34ch;margin:0 auto 40px;font-style:italic;font-size:clamp(18px,2.2vw,22px);color:#F3D9A4;text-wrap:pretty">{{ galleryCaption }}</p>
+  <div style="position:relative;max-width:1100px;margin:0 auto;height:{{ galleryHeight }}px;perspective:1000px">
+    <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="4">
+      <div style="position:absolute;left:{{ ph.left }};top:{{ ph.top }};width:{{ ph.width }};animation:floaty {{ ph.dur }}s ease-in-out {{ ph.delay }}s infinite;z-index:{{ ph.z }}">
+        <div role="img" aria-label="{{ ph.alt }}" onPointerMove="{{ ph.onMove }}" onPointerDown="{{ ph.onDown }}" onPointerUp="{{ ph.onUp }}" onPointerCancel="{{ ph.onUp }}" onPointerLeave="{{ ph.onLeave }}" style="background:#F7E4CC;padding:8px 8px 16px;border:1px solid #C8A35F;box-shadow:{{ ph.shadow }};transform:{{ ph.transform }};transition:{{ ph.transition }};transform-style:preserve-3d;touch-action:none;cursor:grab;user-select:none;will-change:transform">
+          <img src="{{ ph.src }}" alt="{{ ph.alt }}" loading="lazy" draggable="false" style="display:block;width:100%;aspect-ratio:3/4;object-fit:cover;pointer-events:none">
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- 4: countdown -->
+<section data-screen-label="Countdown" style="position:relative;padding:110px 16px 120px;overflow:hidden">
+  <img src="images/hall.jpg" alt="" aria-hidden="true" loading="lazy" style="position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;filter:blur(14px) grayscale(.6) brightness(.55)">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,#1A0A0C 0%,rgba(26,10,12,.35) 18%,rgba(26,10,12,.35) 82%,#1A0A0C 100%)"></div>
+  <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:0">
+    <h2 style="display:flex;align-items:center;gap:22px;margin:0 0 44px;font-weight:400;font-size:clamp(22px,3vw,30px);letter-spacing:.28em;color:#E4CFA4;text-transform:uppercase"><span style="width:clamp(40px,10vw,120px);height:1px;background:linear-gradient(90deg,transparent,rgba(228,207,164,.5))"></span>The Countdown<span style="width:clamp(40px,10vw,120px);height:1px;background:linear-gradient(90deg,rgba(228,207,164,.5),transparent)"></span></h2>
+
+    <div style="width:min(470px,100%);border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.28);box-shadow:0 30px 60px -20px rgba(0,0,0,.6)">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:20px 56px;background:#0B0A0A;color:#E4CFA4">
+        <span style="text-align:left;font-size:13px;letter-spacing:.3em">{{ cal.year }}</span>
+        <span style="font-size:clamp(20px,3vw,27px);font-weight:600;letter-spacing:.14em;color:#F7E4CC">{{ cal.month }}</span>
+        <span style="text-align:right;font-size:13px;letter-spacing:.3em">{{ cal.wdShort }}</span>
+      </div>
+      <div style="padding:36px 24px 30px;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#111">
+        <div style="font-size:clamp(96px,16vw,124px);font-weight:400;line-height:1;letter-spacing:-.02em;font-variant-numeric:oldstyle-nums">{{ cal.day }}</div>
+        <div style="width:64px;height:1px;background:#4a4644;margin:26px auto 18px"></div>
+        <div style="font-size:19px;letter-spacing:.32em;text-transform:uppercase">{{ cal.weekday }}</div>
+        <div style="font-size:28px;margin-top:10px;font-variant-numeric:oldstyle-nums">{{ cal.time }}</div>
+      </div>
+    </div>
+
+    <a href="{{ icsHref }}" download="wedding.ics" style="display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:16px 36px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#E4CFA4;text-decoration:none;font-size:15px;letter-spacing:.26em;text-transform:uppercase" style-hover="background:rgba(255,255,255,.22)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+      Save the date
+    </a>
+
+    <div style="width:min(800px,100%);margin-top:30px;padding:28px 24px 28px;border-radius:28px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
+      <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:26px;font-size:clamp(20px,2.6vw,26px);letter-spacing:.24em;text-transform:uppercase;color:#E4CFA4"><span style="width:clamp(30px,8vw,90px);height:1px;background:linear-gradient(90deg,transparent,rgba(228,207,164,.5))"></span>{{ countdownLabel }}<span style="width:clamp(30px,8vw,90px);height:1px;background:linear-gradient(90deg,rgba(228,207,164,.5),transparent)"></span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,2vw,18px)">
+        <sc-for list="{{ units }}" as="u" hint-placeholder-count="4">
+          <div style="padding:clamp(22px,4vw,38px) 4px clamp(18px,3vw,26px);border-radius:18px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.28);color:#161414">
+            <div aria-label="{{ u.value }}" style="display:flex;justify-content:center;font-size:clamp(30px,5vw,44px);line-height:1;height:1em;overflow:hidden;font-variant-numeric:oldstyle-nums">
+              <sc-for list="{{ u.digits }}" as="d" hint-placeholder-count="2">
+                <div aria-hidden="true" style="height:1em;transform:translateY({{ d.y }});transition:transform .55s cubic-bezier(.2,.8,.2,1)">
+                  <div style="height:1em">0</div><div style="height:1em">1</div><div style="height:1em">2</div><div style="height:1em">3</div><div style="height:1em">4</div><div style="height:1em">5</div><div style="height:1em">6</div><div style="height:1em">7</div><div style="height:1em">8</div><div style="height:1em">9</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:14px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#2a2626">{{ u.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5: church -->
+<section data-screen-label="Ceremony" style="position:relative;padding:40px 16px 110px;background:linear-gradient(180deg,#1A0A0C,#200A0E 50%,#1A0A0C)">
+  <div style="width:min(520px,100%);margin:0 auto;display:flex;flex-direction:column;gap:14px">
+    <div style="position:relative;height:min(78vh,620px);border-radius:28px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)">
+      <img src="images/church.jpg" alt="The couple on the stone steps of a church under a gothic arch" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,12,.05) 30%,rgba(26,10,12,.55) 65%,rgba(26,10,12,.96) 100%)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:0 28px 32px;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#C8A35F">The Ceremony</div>
+        <h2 style="margin:0;font-weight:400;font-size:clamp(26px,4vw,34px);line-height:1.15;color:#F7E4CC;text-wrap:balance">{{ ceremony.name }}</h2>
+        <sc-if value="{{ hasSecondary }}" hint-placeholder-val="{{ true }}">
+          <div lang="ar" dir="rtl" style="font-family:'Amiri',serif;font-size:clamp(20px,3vw,26px);line-height:1.5;color:#F3D9A4">{{ ceremony.nameSecondary }}</div>
+        </sc-if>
+        <div style="margin-top:6px;font-size:18px;color:#E4CFA4;font-variant-numeric:oldstyle-nums">{{ ceremony.time }}</div>
+      </div>
+    </div>
+    <div style="padding:22px 22px 22px;border-radius:28px;background:rgba(247,228,204,.06);border:1px solid rgba(200,163,95,.3);display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:flex-start;gap:12px;text-align:left">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8A35F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <p style="margin:0;font-size:17px;line-height:1.5;color:#F7E4CC;text-wrap:pretty">{{ ceremony.address }}</p>
+      </div>
+      <a href="{{ ceremony.mapsUrl }}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;border-radius:999px;background:#6E0D1A;border:1px solid #C8A35F;color:#F7E4CC;text-decoration:none;font-size:15px;letter-spacing:.18em;text-transform:uppercase;transition:background .2s" style-hover="background:#7E1222">
+        Open in Google Maps
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 6: leave a message -->
+<section data-screen-label="Message" style="position:relative;padding:120px 16px 140px;overflow:hidden">
+  <img src="images/message-bg.jpg" alt="" aria-hidden="true" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,#1A0A0C 0%,rgba(26,10,12,.55) 22%,rgba(26,10,12,.55) 100%)"></div>
+  <form onSubmit="{{ submit }}" noValidate style="position:relative;width:min(520px,100%);margin:0 auto;padding:40px 30px 34px;border-radius:24px;background:rgba(255,240,225,.10);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.18);border-top-color:rgba(255,255,255,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 40px rgba(255,240,225,.05),0 30px 60px -20px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:18px;text-align:left">
+    <div style="text-align:center">
+      <h2 style="margin:0;font-weight:400;font-size:clamp(30px,4vw,38px);line-height:1.15;color:#F7E4CC">Leave a message</h2>
+      <p style="margin:6px 0 0;font-style:italic;color:#E4CFA4">Write your wishes for the couple</p>
+    </div>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#C8A35F">Your name
+      <input type="text" value="{{ name }}" onChange="{{ setName }}" placeholder="Your name" autoComplete="name" style="width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(255,240,225,.12);color:#F7E4CC;font-size:17px;letter-spacing:0;text-transform:none">
+      <sc-if value="{{ errName }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:14px;letter-spacing:0;text-transform:none;color:#F3D9A4;font-style:italic">{{ errName }}</span></sc-if>
+    </label>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#C8A35F">Your message
+      <textarea value="{{ msg }}" onChange="{{ setMsg }}" maxLength="{{ maxLength }}" rows="5" placeholder="Write a few words for Omar and Sara" style="width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(255,240,225,.12);color:#F7E4CC;font-size:17px;line-height:1.5;resize:vertical;letter-spacing:0;text-transform:none"></textarea>
+      <div style="display:flex;justify-content:space-between;gap:12px;letter-spacing:0;text-transform:none">
+        <sc-if value="{{ errMsg }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:14px;color:#F3D9A4;font-style:italic">{{ errMsg }}</span></sc-if>
+        <span aria-live="polite" style="margin-left:auto;font-size:13px;color:#E4CFA4;font-variant-numeric:tabular-nums">{{ msgLen }}/{{ maxLength }}</span>
+      </div>
+    </label>
+    <button type="submit" disabled="{{ sending }}" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:6px;padding:16px 20px;border-radius:999px;background:#6E0D1A;border:1px solid #C8A35F;color:#F7E4CC;font-size:15px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;opacity:{{ btnOpacity }};transition:background .2s" style-hover="background:#7E1222">
+      <sc-if value="{{ sending }}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg></sc-if>
+      {{ btnLabel }}
+    </button>
+    <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:6px">
+        <svg viewBox="0 0 100 100" style="width:64px;height:64px;filter:drop-shadow(0 3px 4px rgba(60,0,8,.45));animation:stamp .6s cubic-bezier(.2,.9,.3,1.3) both"><defs><radialGradient id="wxs" gradientUnits="userSpaceOnUse" cx="38" cy="32" r="62"><stop offset="0" stop-color="#C92535"></stop><stop offset=".55" stop-color="#A8182B"></stop><stop offset="1" stop-color="#6E0D1A"></stop></radialGradient></defs><g fill="url(#wxs)"><circle cx="50" cy="50" r="40"></circle><circle cx="50" cy="12" r="15"></circle><circle cx="77" cy="23" r="15"></circle><circle cx="88" cy="50" r="15"></circle><circle cx="77" cy="77" r="15"></circle><circle cx="50" cy="88" r="15"></circle><circle cx="23" cy="77" r="15"></circle><circle cx="12" cy="50" r="15"></circle><circle cx="23" cy="23" r="15"></circle></g><circle cx="50" cy="50" r="30" fill="none" stroke="#7A0F1E" stroke-width="1.6"></circle><g fill="none" stroke="#7A0F1E" stroke-width="2.2" stroke-linecap="round"><path d="M50 62 C 44 60, 42 52, 47 48 C 52 44, 58 47, 56 53 C 54 58, 47 57, 48 52 C 49 49, 53 50, 52 53"></path><path d="M50 62 C 48 70, 44 74, 38 80"></path><path d="M44 71 c -6 -2 -10 2 -12 6 c 6 2 10 -1 12 -6z"></path><path d="M47 66 c 6 -2 10 2 12 6 c -6 2 -10 -1 -12 -6z"></path></g><ellipse cx="38" cy="30" rx="16" ry="8" fill="#fff" opacity=".22" transform="rotate(-25 38 30)"></ellipse></svg>
+        <span style="font-style:italic;color:#F3D9A4">Message sent</span>
+      </div>
+    </sc-if>
+  </form>
+</section>
+
+<!-- floating music control -->
+<button type="button" onClick="{{ toggleMusic }}" aria-label="{{ musicLabel }}" aria-pressed="{{ playing }}" style="position:fixed;right:18px;bottom:18px;z-index:50;width:54px;height:54px;border-radius:50%;border:1px solid rgba(200,163,95,.55);background:rgba(26,10,12,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#C8A35F;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 12px 30px -10px rgba(0,0,0,.7);opacity:{{ musicOpacity }};transition:opacity .5s,background .2s" style-hover="background:rgba(110,13,26,.7)">
+  <span aria-hidden="true" style="position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(200,163,95,.5);animation:{{ ringAnim }}"></span>
+  <sc-if value="{{ playing }}" hint-placeholder-val="{{ true }}">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+  </sc-if>
+  <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"></path><line x1="22" x2="16" y1="9" y2="15"></line><line x1="16" x2="22" y1="9" y2="15"></line></svg>
+  </sc-if>
+</button>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;groomName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Omar&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Couple&quot;},&quot;brideName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sara&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Couple&quot;},&quot;eventDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2026-10-20T18:00:00+03:00&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Event&quot;},&quot;openHint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Tap to open&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Copy&quot;},&quot;galleryCaption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Our next chapter starts with all of you beside us.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Copy&quot;},&quot;musicSrc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Music&quot;},&quot;onSubmit&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(name: string, message: string) =&gt; Promise&lt;void&gt;&quot;}}">
+const CFG = {
+  groomName: "Omar", brideName: "Sara",
+  eventDate: "2026-10-20T18:00:00+03:00",
+  invitation: { openHint: "Tap to open" },
+  gallery: {
+    caption: "Our next chapter starts with all of you beside us.",
+    photos: [
+      { src: "images/couple-1.jpg", alt: "The couple framed on a phone screen" },
+      { src: "images/couple-2.jpg", alt: "The bride's lace sleeves around the groom" },
+      { src: "images/couple-3.jpg", alt: "First dance, seen from above" },
+      { src: "images/couple-4.jpg", alt: "Portrait of the couple in a garden" }
+    ]
+  },
+  countdown: { afterEventLabel: "Just married" },
+  ceremony: {
+    name: "Cathedral of the Virgin Mary, Coptic Catholic",
+    nameSecondary: "كاتدرائية السيدة العذراء للأقباط الكاثوليك",
+    time: "6:00 PM",
+    address: "18 Mohammed Tawfik Diab, Al Mintaqah as Sadisah, Nasr City, Cairo Governorate 4450333",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("18 Mohammed Tawfik Diab, Al Mintaqah as Sādisah, Nasr City, Cairo Governorate 4450333")
+  },
+  message: { maxLength: 300 }
+};
+const ROT = [-6, 4, -3, 7];
+const MOBILE = [{l:'5%',t:'1%',w:'42%'},{l:'50%',t:'9%',w:'45%'},{l:'3%',t:'46%',w:'47%'},{l:'55%',t:'53%',w:'39%'}];
+const DESKTOP = [{l:'6%',t:'6%',w:'22%'},{l:'28%',t:'16%',w:'24%'},{l:'51%',t:'0%',w:'22%'},{l:'73%',t:'18%',w:'21%'}];
+const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
+const idle = ()=>({rx:0,ry:0,tx:0,ty:0,s:1,active:false});
+const MONTHS=["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+const DAYS=["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+
+class Component extends DCLogic {
+  state = { p:0, now:Date.now(), vw:1024, reduced:false, cards:[idle(),idle(),idle(),idle()], name:"", msg:"", errName:"", errMsg:"", sending:false, sent:false, playing:false, musicShown:false };
+  heroRef = React.createRef();
+  drag = null;
+
+  componentDidMount(){
+    this.onScroll = ()=>{ const el=this.heroRef.current; if(!el) return; const max=el.offsetHeight-window.innerHeight; const y=window.scrollY-el.offsetTop; const p=clamp(max>0?y/max:1,0,1); this.setState({p}); if(p>0.4&&!this.state.playing&&!this.musicTried){ this.musicTried=true; this.startMusic(); } };
+    this.onResize = ()=>{ this.setState({vw:window.innerWidth}); this.onScroll(); };
+    window.addEventListener('scroll',this.onScroll,{passive:true});
+    window.addEventListener('resize',this.onResize);
+    this.onResize();
+    this.timer = setInterval(()=>this.setState({now:Date.now()}),1000);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.setState({reduced:mq.matches});
+  }
+  componentWillUnmount(){ window.removeEventListener('scroll',this.onScroll); window.removeEventListener('resize',this.onResize); clearInterval(this.timer); }
+
+  openCard = ()=>{ const el=this.heroRef.current; if(!el) return; this.startMusic(); window.scrollTo({top:el.offsetTop+el.offsetHeight-window.innerHeight, behavior:'smooth'}); };
+
+  // Music: real track when musicSrc is set, otherwise a quiet synthesized pad as a stand-in.
+  startMusic(){
+    if(this.state.playing||this.userStopped) return;
+    const src=this.props.musicSrc??"";
+    if(src){
+      if(!this.audio){ this.audio=new Audio(src); this.audio.loop=true; this.audio.volume=0.6; }
+      this.audio.play().then(()=>this.setState({playing:true,musicShown:true})).catch(()=>this.setState({musicShown:true}));
+      return;
+    }
+    try{
+      if(!this.ctx){
+        const C=window.AudioContext||window.webkitAudioContext; this.ctx=new C();
+        const master=this.ctx.createGain(); master.gain.value=0; master.connect(this.ctx.destination); this.master=master;
+        [174.61,220,261.63,329.63,392].forEach((f,i)=>{
+          const o=this.ctx.createOscillator(); o.type='sine'; o.frequency.value=f;
+          const g=this.ctx.createGain(); g.gain.value=0.05;
+          const lfo=this.ctx.createOscillator(); lfo.frequency.value=0.05+i*0.017; const lg=this.ctx.createGain(); lg.gain.value=0.035;
+          lfo.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(master); o.start(); lfo.start();
+        });
+      }
+      this.ctx.resume().then(()=>{
+        if(this.ctx.state!=='running'){ this.setState({musicShown:true}); return; }
+        this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.master.gain.linearRampToValueAtTime(0.5,this.ctx.currentTime+3);
+        this.setState({playing:true,musicShown:true});
+      });
+    }catch(e){ this.setState({musicShown:true}); }
+  }
+  stopMusic(){
+    if(this.audio) this.audio.pause();
+    if(this.ctx&&this.master){ this.master.gain.cancelScheduledValues(this.ctx.currentTime); this.master.gain.linearRampToValueAtTime(0,this.ctx.currentTime+0.6); }
+    this.setState({playing:false});
+  }
+  toggleMusic = ()=>{ if(this.state.playing){ this.userStopped=true; this.stopMusic(); } else { this.userStopped=false; this.startMusic(); } };
+
+  setCard(i, patch){ this.setState(s=>{ const cards=s.cards.slice(); cards[i]={...cards[i],...patch}; return {cards}; }); }
+  tiltFrom(e){ const r=e.currentTarget.getBoundingClientRect(); const nx=(e.clientX-r.left)/r.width-.5, ny=(e.clientY-r.top)/r.height-.5; return {rx:-ny*18, ry:nx*18, tx:-nx*12, ty:-ny*12}; }
+  onMove(i,e){
+    if(this.state.reduced) return;
+    if(this.drag && this.drag.i===i){ this.setCard(i,{tx:e.clientX-this.drag.x, ty:e.clientY-this.drag.y, s:1.06, active:true}); return; }
+    if(e.pointerType==='touch') return;
+    this.setCard(i,{...this.tiltFrom(e), s:1.05, active:true});
+  }
+  onDown(i,e){
+    if(this.state.reduced) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    this.drag={i,x:e.clientX,y:e.clientY};
+    const t=this.tiltFrom(e);
+    this.setCard(i,{rx:t.rx*1.4, ry:t.ry*1.4, tx:0, ty:0, s:1.08, active:e.pointerType!=='touch'});
+  }
+  onUp(i){ this.drag=null; this.setCard(i,idle()); }
+  onLeave(i){ if(this.drag&&this.drag.i===i) return; this.setCard(i,idle()); }
+
+  eventParts(){
+    const iso=this.props.eventDate ?? CFG.eventDate;
+    const d=new Date(iso); const m=/([+-])(\d\d):(\d\d)$/.exec(iso);
+    const off=m?(m[1]==='-'?-1:1)*(parseInt(m[2])*60+parseInt(m[3]))*60000:0;
+    const loc=new Date(d.getTime()+off);
+    let h=loc.getUTCHours(), mm=loc.getUTCMinutes(); const ap=h>=12?'PM':'AM'; h=h%12||12;
+    return { target:d.getTime(), year:String(loc.getUTCFullYear()), month:MONTHS[loc.getUTCMonth()], day:String(loc.getUTCDate()).padStart(2,'0'), weekday:DAYS[loc.getUTCDay()], wdShort:DAYS[loc.getUTCDay()].slice(0,3), time:h+':'+String(mm).padStart(2,'0')+' '+ap, iso };
+  }
+
+  submit = (e)=>{
+    e.preventDefault();
+    const {name,msg}=this.state;
+    const errName=name.trim()?"":"Add your name so the couple knows who wrote this.";
+    const errMsg=msg.trim()?"":"Write a message before sending.";
+    this.setState({errName,errMsg,sent:false});
+    if(errName||errMsg) return;
+    this.setState({sending:true});
+    const onSubmit=this.props.onSubmit ?? ((n,m)=>new Promise(r=>setTimeout(r,1200)));
+    onSubmit(name.trim(),msg.trim()).then(()=>this.setState({sending:false,sent:true,name:"",msg:""}));
+  };
+
+  renderVals(){
+    const {p,vw,cards,now,name,msg,errName,errMsg,sending,sent}=this.state;
+    const open=clamp(p/0.85,0,1);
+    const crack=clamp(p/0.12,0,1);
+    const ev=this.eventParts();
+    const diff=Math.max(0,ev.target-now);
+    const past=ev.target-now<=0;
+    const dd=Math.floor(diff/86400000), hh=Math.floor(diff/3600000)%24, mi=Math.floor(diff/60000)%60, ss=Math.floor(diff/1000)%60;
+    const unit=(label,v)=>{ const str=String(v).padStart(2,'0'); return {label, value:str, digits:str.split('').map(c=>({y:'-'+c+'em'}))}; };
+    const isDesk=vw>=768;
+    const pos=isDesk?DESKTOP:MOBILE;
+    const photos=CFG.gallery.photos.map((ph,i)=>{ const c=cards[i]; return {
+      ...ph, left:pos[i].l, top:pos[i].t, width:pos[i].w, dur:[5.2,6.4,4.6,7.1][i], delay:[0,-1.7,-3.1,-0.8][i], z:c.active?10:i+1,
+      transform:`translate(${c.tx}px,${c.ty}px) rotate(${ROT[i]}deg) rotateX(${c.rx}deg) rotateY(${c.ry}deg) scale(${c.s})`,
+      transition:c.active?'box-shadow .3s':'transform .8s cubic-bezier(.34,1.56,.64,1), box-shadow .5s',
+      shadow:c.active?'0 40px 70px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(200,163,95,.3)':'0 24px 50px -18px rgba(0,0,0,.7)',
+      onMove:e=>this.onMove(i,e), onDown:e=>this.onDown(i,e), onUp:()=>this.onUp(i), onLeave:()=>this.onLeave(i)
+    };});
+    const start=ev.iso.replace(/[-:]/g,'').replace(/\.\d+/,'');
+    const ics="data:text/calendar;charset=utf-8,"+encodeURIComponent(`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:${new Date(ev.target).toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'')}\nSUMMARY:${(this.props.groomName??CFG.groomName)} & ${(this.props.brideName??CFG.brideName)} — Wedding\nLOCATION:${CFG.ceremony.address}\nEND:VEVENT\nEND:VCALENDAR`);
+    return {
+      heroRef:this.heroRef, openCard:this.openCard,
+      groomName:this.props.groomName??CFG.groomName, brideName:this.props.brideName??CFG.brideName,
+      openHint:this.props.openHint??CFG.invitation.openHint, galleryCaption:this.props.galleryCaption??CFG.gallery.caption,
+      bgScale:(1.1-0.1*p).toFixed(3), namesClip:Math.round(100-clamp((p-0.55)/0.4,0,1)*100),
+      nightOpacity:(1-clamp((p-0.05)/0.5,0,1)).toFixed(3),
+      cardScale:(1+open*1.8).toFixed(3), cardOpacity:(1-clamp((p-0.85)/0.12,0,1)).toFixed(3), cardEvents:p>0.85?'none':'auto',
+      leftRot:(-open*100).toFixed(2), rightRot:(open*100).toFixed(2),
+      sealShift:(crack*3).toFixed(2), sealRotL:(-crack*5).toFixed(2), sealRotR:(crack*5).toFixed(2),
+      hintOpacity:(1-clamp(p/0.15,0,1)).toFixed(3),
+      groomInitial:(this.props.groomName??CFG.groomName).trim().charAt(0).toUpperCase(), brideInitial:(this.props.brideName??CFG.brideName).trim().charAt(0).toUpperCase(),
+      seamOpacity:(1-clamp(p/0.2,0,1)).toFixed(3),
+      ornamentOpacity:clamp((p-0.55)/0.35,0,1).toFixed(3),
+      dateLine:`${ev.day} · ${ev.month.slice(0,3)} · ${ev.year}`,
+      toggleMusic:this.toggleMusic, playing:this.state.playing, paused:!this.state.playing,
+      musicLabel:this.state.playing?"Pause music":"Play music",
+      musicOpacity:(this.state.musicShown||p>0.3)?1:0,
+      ringAnim:this.state.playing?"ring 2.4s ease-out infinite":"none",
+      photos, galleryHeight:isDesk?600:660,
+      cal:ev, icsHref:ics,
+      countdownLabel:past?CFG.countdown.afterEventLabel:"Countdown",
+      units:[unit('Days',dd),unit('Hrs',hh),unit('Min',mi),unit('Sec',ss)],
+      ceremony:CFG.ceremony, hasSecondary:!!CFG.ceremony.nameSecondary,
+      name, msg, errName, errMsg, sending, sent, msgLen:msg.length, maxLength:CFG.message.maxLength,
+      setName:e=>this.setState({name:e.target.value,errName:""}), setMsg:e=>this.setState({msg:e.target.value.slice(0,CFG.message.maxLength),errMsg:""}),
+      submit:this.submit, btnLabel:sending?"Sending…":"Send message", btnOpacity:sending?0.7:1
+    };
+  }
+}
+</script>
+</body>
+</html>
