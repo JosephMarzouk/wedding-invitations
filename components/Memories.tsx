@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { assetUrl, type Memory, type Strings } from "@/lib/wedding";
+import { remoteAssetUrl, type Memory, type Strings } from "@/lib/wedding";
+
+const PAGE_SIZE = 4; // 2x2 grid per page
 import { Spinner, WaxSeal } from "./Guestbook";
 
 const MAX_SIDE = 1600;
@@ -21,6 +23,7 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
   const [name, setName] = useState("");
   const [err, setErr] = useState("");
   const [list, setList] = useState(initial);
+  const [page, setPage] = useState(0);
 
   const stop = () => { stream.current?.getTracks().forEach((t) => t.stop()); stream.current = null; };
   useEffect(() => stop, []);
@@ -87,6 +90,7 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
     const { error } = await supabase.rpc("post_memory", { p_wedding_id: weddingId, p_storage_path: path, p_guest_name: name.trim() || null });
     if (error) { setErr(error.message); setMode("shot"); return; }
     setList(await fetchMemories(weddingId));
+    setPage(0); // jump back to the page showing the photo they just sent
     setMode("done");
   };
 
@@ -142,16 +146,41 @@ export default function Memories({ weddingId, coupleLine, dateLine, initial, str
         )}
       </div>
 
-      {list.length > 0 && (
-        <div style={{ width: "min(1100px,100%)", margin: "48px auto 0", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 22, padding: "0 8px" }}>
-          {list.map((m, i) => (
-            <figure key={m.id} style={{ margin: 0, background: "var(--bg)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px color-mix(in srgb, var(--ink) 45%, transparent)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
-              <img src={assetUrl(`memories/${m.storage_path}`)} alt={m.guest_name ? `${m.guest_name}` : ""} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "3/4", objectFit: "cover" }} />
-              {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "var(--text-muted)", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
-            </figure>
-          ))}
-        </div>
-      )}
+      {list.length > 0 && (() => {
+        const pageCount = Math.ceil(list.length / PAGE_SIZE);
+        const shown = list.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
+        return (
+          <div style={{ width: "min(560px,100%)", margin: "48px auto 0", padding: "0 8px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 22 }}>
+              {shown.map((m, i) => (
+                <figure key={m.id} style={{ margin: 0, background: "var(--bg)", padding: "6px 6px 12px", border: "1px solid var(--accent)", boxShadow: "0 24px 50px -18px color-mix(in srgb, var(--ink) 45%, transparent)", transform: `rotate(${[-3, 2, -1.5, 3][i % 4]}deg)` }}>
+                  {/* remoteAssetUrl, not assetUrl — an uploaded photo's path has no local dev placeholder to fall back to. */}
+                  <img src={remoteAssetUrl(`memories/${m.storage_path}`)} alt={m.guest_name ? `${m.guest_name}` : ""} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "3/4", objectFit: "cover" }} />
+                  {m.guest_name && <figcaption style={{ marginTop: 8, fontSize: 12, letterSpacing: ".12em", color: "var(--text-muted)", textTransform: "uppercase" }}>{m.guest_name}</figcaption>}
+                </figure>
+              ))}
+            </div>
+            {pageCount > 1 && (
+              <nav aria-label="Memory photos" style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 28 }}>
+                {Array.from({ length: pageCount }, (_, i) => (
+                  <button
+                    key={i} type="button" onClick={() => setPage(i)} aria-label={`Page ${i + 1}`} aria-current={page === i ? "page" : undefined}
+                    style={{
+                      width: 34, height: 34, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                      border: `1px solid ${page === i ? "var(--primary)" : "var(--glass-border)"}`,
+                      background: page === i ? "var(--primary)" : "transparent",
+                      color: page === i ? "var(--text-on-dark)" : "var(--ink)",
+                      fontSize: 13, cursor: "pointer",
+                    }}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </nav>
+            )}
+          </div>
+        );
+      })()}
     </section>
   );
 }
