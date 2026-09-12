@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useOpening } from "./useOpening";
+import { nameSweep, useOpening } from "./useOpening";
 import { CornerVines, Ornaments } from "./ornaments";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -46,10 +46,7 @@ export default function Invitation({ a, b, image, seal = `${ART}/seal.png`, hint
   const open = clamp(p / 0.85, 0, 1);
   const crack = clamp(p / 0.12, 0, 1);
   const ornament = clamp((p - 0.55) / 0.35, 0, 1);
-  const reveal = clamp((p - 0.55) / 0.4, 0, 1);
-  // A soft-edged sweep, not a clip rectangle: clipping the names would also cut their candle glow
-  // into a hard-edged box, which shows up as a pale panel while the reveal is mid-way.
-  const nameMask = reveal >= 1 ? "none" : `linear-gradient(to ${rtl ? "left" : "right"}, #000 ${(reveal * 100 - 5).toFixed(1)}%, transparent ${(reveal * 100 + 3).toFixed(1)}%)`;
+  const nameMask = nameSweep(p, rtl);
   const nameStyle: React.CSSProperties = {
     fontFamily: "var(--font-script)", fontSize: "clamp(56px,12vw,128px)", lineHeight: 1.1, color: "var(--candle)",
     textShadow: "0 0 24px color-mix(in srgb, var(--candle) 45%, transparent), 0 0 60px color-mix(in srgb, var(--seal) 35%, transparent)", padding: "0 .25em",

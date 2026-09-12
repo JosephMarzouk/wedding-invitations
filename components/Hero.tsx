@@ -1,5 +1,5 @@
 "use client";
-import { useOpening } from "./useOpening";
+import { nameSweep, useOpening } from "./useOpening";
 import { CornerVines, Ornaments } from "./ornaments";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -16,7 +16,7 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
   const start = rtl ? "right" : "left";
   const end = rtl ? "left" : "right";
   const ornament = clamp((p - 0.55) / 0.35, 0, 1);
-  const namesClip = Math.round(100 - clamp((p - 0.55) / 0.4, 0, 1) * 100);
+  const nameMask = nameSweep(p, rtl);
   const nameStyle: React.CSSProperties = {
     fontFamily: "var(--font-script)", fontSize: "clamp(56px,12vw,128px)", lineHeight: 1.1, color: "var(--candle)",
     textShadow: "0 0 24px color-mix(in srgb, var(--candle) 45%, transparent), 0 0 60px color-mix(in srgb, var(--primary) 35%, transparent)", padding: "0 .25em",
@@ -38,7 +38,8 @@ export default function Hero({ a, b, dateLine, kicker, image, overlay, scrollCue
 
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
             <div className="w-kicker" style={{ marginBottom: "clamp(8px,2vh,22px)", opacity: ornament, transition: "opacity .4s" }}>{kicker}</div>
-            <div style={{ clipPath: rtl ? `inset(0 0 0 ${namesClip}%)` : `inset(0 ${namesClip}% 0 0)`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            {/* padding keeps the glow inside the mask box; the negative margin cancels it in layout */}
+            <div style={{ WebkitMaskImage: nameMask, maskImage: nameMask, padding: 72, margin: -72, display: "flex", flexDirection: "column", alignItems: "center" }}>
               <div style={nameStyle}>{a}</div>
               <div style={{ fontStyle: "italic", fontSize: "clamp(28px,4vw,44px)", color: "var(--accent)", lineHeight: 1, margin: "4px 0 8px" }}>&amp;</div>
               <div style={nameStyle}>{b}</div>

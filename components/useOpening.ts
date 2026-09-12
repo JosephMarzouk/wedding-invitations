@@ -66,3 +66,13 @@ export function useOpening() {
 
   return { ref, p, openCard };
 }
+
+/** The left-to-right sweep that writes the couple names in, as a mask-image value.
+ *  A mask, not a clip rectangle: a clip cuts the names candle glow off at the element box, which
+ *  shows up as a pale hard-edged panel behind them for as long as the sweep is mid-way. Give the
+ *  masked element padding so the glow falls inside the mask box. */
+export function nameSweep(p: number, rtl: boolean) {
+  const reveal = clamp((p - 0.55) / 0.4, 0, 1);
+  if (reveal >= 1) return "none";
+  return `linear-gradient(to ${rtl ? "left" : "right"}, #000 ${(reveal * 100 - 5).toFixed(1)}%, transparent ${(reveal * 100 + 3).toFixed(1)}%)`;
+}
