@@ -55,7 +55,8 @@ body { margin: 0; -webkit-font-smoothing: antialiased; }
    ink = paper, primary = velvet, accent = gold); this layer fixes the roles that differ from the
    light design: paper is the ink color, shadows are black, glass is a warm translucent film. */
 .wedding[data-design="2"] {
-  --bg-secondary: #241013;
+  /* same as --bg: a lighter section rectangle reads as a translucent panel on the night design */
+  --bg-secondary: var(--bg);
   --text-secondary: #D8C0AA;
   --text-muted: #A99589;
   --text-on-dark: var(--ink);

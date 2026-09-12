@@ -46,7 +46,10 @@ export default function Invitation({ a, b, image, seal = `${ART}/seal.png`, hint
   const open = clamp(p / 0.85, 0, 1);
   const crack = clamp(p / 0.12, 0, 1);
   const ornament = clamp((p - 0.55) / 0.35, 0, 1);
-  const namesClip = Math.round(100 - clamp((p - 0.55) / 0.4, 0, 1) * 100);
+  const reveal = clamp((p - 0.55) / 0.4, 0, 1);
+  // A soft-edged sweep, not a clip rectangle: clipping the names would also cut their candle glow
+  // into a hard-edged box, which shows up as a pale panel while the reveal is mid-way.
+  const nameMask = reveal >= 1 ? "none" : `linear-gradient(to ${rtl ? "left" : "right"}, #000 ${(reveal * 100 - 5).toFixed(1)}%, transparent ${(reveal * 100 + 3).toFixed(1)}%)`;
   const nameStyle: React.CSSProperties = {
     fontFamily: "var(--font-script)", fontSize: "clamp(56px,12vw,128px)", lineHeight: 1.1, color: "var(--candle)",
     textShadow: "0 0 24px color-mix(in srgb, var(--candle) 45%, transparent), 0 0 60px color-mix(in srgb, var(--seal) 35%, transparent)", padding: "0 .25em",
@@ -60,13 +63,14 @@ export default function Invitation({ a, b, image, seal = `${ART}/seal.png`, hint
         <div style={{ position: "absolute", inset: 0, background: "var(--bg)" }}>
           <img src={image} alt="" aria-hidden style={{ position: "absolute", inset: "-6%", width: "112%", height: "112%", objectFit: "cover", filter: "blur(18px) saturate(.9)", transform: `scale(${(1.1 - 0.1 * p).toFixed(3)})`, transformOrigin: "center", willChange: "transform" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, color-mix(in srgb, var(--shade) 72%, transparent) 0%, color-mix(in srgb, color-mix(in srgb, var(--primary) 30%, var(--shade)) 55%, transparent) 45%, color-mix(in srgb, var(--shade) 90%, transparent) 100%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--seal) 35%, transparent), transparent 18%), radial-gradient(circle at 84% 72%, color-mix(in srgb, var(--seal) 30%, transparent), transparent 16%), radial-gradient(circle at 70% 18%, color-mix(in srgb, var(--paper) 14%, transparent), transparent 12%), radial-gradient(circle at 24% 80%, color-mix(in srgb, var(--paper) 10%, transparent), transparent 14%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--seal) 35%, transparent), transparent 18%), radial-gradient(circle at 84% 72%, color-mix(in srgb, var(--seal) 30%, transparent), transparent 16%)" }} />
 
           <Ornaments />
           <CornerVines opacity={ornament} />
 
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
-            <div style={{ clipPath: rtl ? `inset(0 0 0 ${namesClip}%)` : `inset(0 ${namesClip}% 0 0)`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            {/* padding leaves the glow inside the mask box, so the sweep never shows a straight edge */}
+            <div style={{ WebkitMaskImage: nameMask, maskImage: nameMask, padding: 72, display: "flex", flexDirection: "column", alignItems: "center" }}>
               <div style={nameStyle}>{a}</div>
               <div style={{ fontStyle: "italic", fontSize: "clamp(28px,4vw,44px)", color: "var(--accent)", lineHeight: 1, margin: "4px 0 8px" }}>&amp;</div>
               <div style={nameStyle}>{b}</div>
