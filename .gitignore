@@ -43,3 +43,6 @@ next-env.d.ts
 # graphify: machine-local interpreter/root paths
 graphify-out/.graphify_python
 graphify-out/.graphify_root
+graphify-out/cache/
+graphify-out/manifest.json
+graphify-out/cost.json
