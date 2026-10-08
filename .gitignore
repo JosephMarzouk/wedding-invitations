@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# graphify: machine-local interpreter/root paths
+graphify-out/.graphify_python
+graphify-out/.graphify_root

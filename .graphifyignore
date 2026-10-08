@@ -1,0 +1,12 @@
+# Photos and icons: stock/reference images, no extractable knowledge, one vision agent each.
+*.jpg
+*.jpeg
+*.png
+*.svg
+*.ico
+# Untracked copy of the design-tool export (duplicates the root .dc.html, _ds and uploads).
+design2/
+# Vendored design-tool runtime and design-system bundle.
+_ds/
+support.js
+package-lock.json
